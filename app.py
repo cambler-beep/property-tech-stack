@@ -11,14 +11,31 @@ fingerprints.py for exactly what's been verified and how), then Gemini
 AI fallback for anything not caught by a hard rule (ai_fallback.py).
 """
 
+import subprocess
 import streamlit as st
 
 from fetcher import fetch_site
+from fetcher_js import fetch_rendered_html
 from fingerprints import check_hard_rules
 from partner_match import load_all_partner_names, find_partner_mentions, build_signal_text_for_matching
 from ai_fallback import extract_signals, classify_with_ai
 
 st.set_page_config(page_title="Property Tech Detector", page_icon="\U0001F50D", layout="centered")
+
+
+@st.cache_resource
+def _ensure_chromium_installed():
+    """Streamlit Community Cloud doesn't install Playwright's Chromium
+    binary by default -- this installs it on the app's first run only
+    (cached so it doesn't re-run per request). This makes the FIRST
+    JS-rendering request after a fresh deploy noticeably slow (a real
+    browser download); every request after that is normal speed. See
+    README for why this workaround exists and its trade-offs."""
+    try:
+        subprocess.run(["playwright", "install", "chromium"], check=True, capture_output=True, timeout=180)
+        return True
+    except Exception:
+        return False
 
 st.title("Property Website Tech Detector")
 st.caption(
@@ -40,6 +57,11 @@ gemini_api_key = st.secrets.get("GEMINI_API_KEY", None)
 
 # --- Input --------------------------------------------------------------
 url = st.text_input("Property website URL", placeholder="https://example-apartments.com")
+use_js_rendering = st.checkbox(
+    "Also render with JavaScript (slower, ~15s -- catches widgets that build "
+    "their own URLs at runtime with no trace in plain HTML at all)",
+    value=False,
+)
 go = st.button("Analyze", type="primary")
 
 if go and url:
@@ -57,6 +79,26 @@ if go and url:
         st.warning(f"ℹ️ {fetch_result['note']}")
 
     html = fetch_result["combined_html"]
+
+    # Optional: also render the homepage with real JS execution and fold
+    # that into what gets analyzed. This is NOT a bot-detection-evasion
+    # step -- a site that blocks the plain fetch above will very likely
+    # block this too (that's the site's security working as intended, see
+    # README). This is purely for catching content that only exists after
+    # JS runs on sites that AREN'T actively blocking automated access.
+    if use_js_rendering:
+        with st.spinner("Setting up JavaScript rendering (first use may take a minute)..."):
+            chromium_ok = _ensure_chromium_installed()
+        if not chromium_ok:
+            st.caption("⚠️ Could not set up JavaScript rendering on this deployment -- skipping.")
+        else:
+            with st.spinner("Rendering with JavaScript (this takes longer)..."):
+                js_result = fetch_rendered_html(url)
+            if js_result["status"] == "ok":
+                html += "\n" + js_result["html"]
+                st.caption(f"✓ {js_result['note']}")
+            else:
+                st.caption(f"JS rendering didn't add anything: {js_result['note']}")
 
     # --- Hard rules pass ------------------------------------------------
     with st.spinner("Checking known fingerprints..."):
