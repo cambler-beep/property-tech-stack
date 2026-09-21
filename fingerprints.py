@@ -108,12 +108,38 @@ HARD_RULES = [
             "irp.cdn-website.com",
             "cdn-website.com",
         ],
+        "confidence": "moderate",
+        "source": "DOWNGRADED from high back to moderate (2026-09-21) after "
+                   "a real conflict: songbirdkirkwood.com matches this "
+                   "pattern, but its footer explicitly says 'Website "
+                   "Design by Repli' / 'Powered by MultiHub' -- direct, "
+                   "authoritative counter-evidence that this domain is NOT "
+                   "Duda-exclusive. Likely explanation: cdn-website.com is "
+                   "shared backend/CDN infrastructure multiple different "
+                   "website-builder platforms use, not a single-vendor "
+                   "fingerprint. Originally seen on prproperties.org and "
+                   "(mistakenly re-confirmed on) songbirdkirkwood.com -- "
+                   "neither was independently verified by an explicit "
+                   "footer credit the way this rule normally requires. "
+                   "Treat any match as a real but uncertain signal, not "
+                   "proof -- check for a footer credit before trusting it.",
+    },
+    {
+        "name": "Repli (MultiHub)",
+        "category": "platform",
+        "patterns": [
+            "website design by repli",
+            "powered by multihub",
+        ],
         "confidence": "high",
-        "source": "Confirmed independently on TWO sites: prproperties.org "
-                   "(central-flats page) and songbirdkirkwood.com -- asset "
-                   "CDN on irp.cdn-website.com both times. Upgraded from "
-                   "moderate to high confidence after the second "
-                   "independent match (2026-09-21).",
+        "source": "Confirmed on songbirdkirkwood.com: explicit footer "
+                   "credits 'Website Design by Repli' and 'Powered by "
+                   "MultiHub' (Repli's product, confirmed as a real "
+                   "multifamily platform in the Revyse vendor research "
+                   "earlier -- 'MultiHub is the property marketing "
+                   "platform for multifamily, built by Repli'). This is "
+                   "also likely the TRUE platform for the Duda "
+                   "false-positive case above on this same site.",
     },
     {
         "name": "WordPress",
@@ -264,6 +290,7 @@ HARD_RULES = [
         "category": "pms",
         "patterns": [
             "entrata.com",
+            "prospectportal.com",
         ],
         "confidence": "moderate",
         "source": "Distinct from the 'Entrata' PLATFORM rule above, which "
@@ -276,7 +303,13 @@ HARD_RULES = [
                    "site) listing 'Entrata - Property Management Software' "
                    "under Widgets, not CMS. Broader substring = more "
                    "false-positive risk than the specific asset-subdomain "
-                   "rule, hence moderate not high confidence.",
+                   "rule, hence moderate not high confidence. "
+                   "prospectportal.com added after songbirdkirkwood.com's "
+                   "'Apply' button linked there -- that page's own footer "
+                   "confirmed 'Entrata, Inc.' explicitly, but the link "
+                   "domain itself doesn't contain the word 'entrata' at "
+                   "all, so the plain entrata.com pattern alone would have "
+                   "missed this one.",
     },
 ]
 
