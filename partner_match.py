@@ -63,6 +63,37 @@ def load_all_partner_names() -> dict:
     }
 
 
+def filter_out_already_reported(partner_hits: list[dict], already_reported_names: list[str]) -> list[dict]:
+    """
+    Remove any partner match whose normalized name overlaps with something
+    already shown under Website Platform or PMS. Otherwise a vendor with
+    BOTH a specific hard rule AND a generic CRM listing (e.g. Repli --
+    has its own "Repli (MultiHub)" platform rule, but is also just
+    "REPLI" in all_partners.csv) shows up twice: once with real detail,
+    once again as bare noise in the generic list. Caught via
+    songbirdkirkwood.com (2026-09-21) -- Repli appeared in both places.
+
+    Uses SUBSTRING containment, not exact equality -- rule names carry
+    descriptive suffixes the bare CSV name won't have (e.g. "repli" vs
+    "repli (multihub)", "entrata" vs "entrata (embedded widget)"), so an
+    exact-match check misses these; a first version of this function had
+    exactly that bug and didn't actually filter anything (caught in
+    testing immediately after writing it, 2026-09-21).
+    """
+    already_normalized = [_normalize(n) for n in already_reported_names]
+    result = []
+    for hit in partner_hits:
+        hit_norm = _normalize(hit["name"])
+        overlaps = any(
+            hit_norm in already or already in hit_norm
+            for already in already_normalized
+            if already  # skip empty strings
+        )
+        if not overlaps:
+            result.append(hit)
+    return result
+
+
 def find_partner_mentions(signal_text: str, partner_names: list[str]) -> list[dict]:
     """
     Scan a NARROW slice of signal text (script/image/link domains + footer
