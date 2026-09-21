@@ -27,8 +27,28 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 ALIASES = {
     "eliseai": ["meetelise", "meet elise", "elise ai"],
     "tour24": ["tour 24", "tour24.com"],
+    "funnel": ["funnelleasing"],  # CSV says "Funnel", live product/domain is
+                                    # "funnelleasing.com" -- the word-boundary
+                                    # match (added to stop "door" matching
+                                    # inside "outdoor") has the side effect of
+                                    # also missing "funnel" as a prefix of a
+                                    # longer compound word with no separator.
+                                    # Confirmed via thegantrydc.com (2026-09-21).
     # add more as discovered, e.g.:
     # "some csv name": ["actual live product/brand name"],
+}
+
+# Legitimate brand names under the 5-character length floor (see
+# find_partner_mentions below) that are NOT ordinary English words, so
+# the false-positive risk that floor exists for doesn't apply to them.
+# The floor exists to stop things like "Door"/"Here"/"Fetch" matching in
+# ordinary marketing copy -- these names don't have that problem, they're
+# just short. Add to this list rather than lowering the floor globally,
+# which would reopen that exact risk for every other short common word.
+SHORT_NAME_EXCEPTIONS = {
+    "hyly",  # real estate marketing/attribution platform -- confirmed via
+             # simpsonpropertygroup.com (2026-09-21), silently filtered by
+             # the length floor despite being a real, distinctive brand name
 }
 
 
@@ -119,8 +139,9 @@ def find_partner_mentions(signal_text: str, partner_names: list[str]) -> list[di
 
     for name in partner_names:
         norm = _normalize(name)
-        if len(norm) < 5:
-            continue  # short names are too collision-prone with ordinary words
+        if len(norm) < 5 and norm not in SHORT_NAME_EXCEPTIONS:
+            continue  # short names are too collision-prone with ordinary words,
+                       # unless explicitly allowlisted above as safe
 
         candidates = [norm] + ALIASES.get(norm, [])
         for candidate in candidates:
