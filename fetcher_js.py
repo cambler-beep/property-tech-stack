@@ -45,6 +45,10 @@ def fetch_rendered_html(url: str) -> dict:
     Returns:
         {"status": "ok" | "error", "html": str, "note": str}
     """
+    if not url.startswith("http"):
+        url = "https://" + url  # Playwright needs a full scheme -- caught via
+                                  # a bare "songbirdkirkwood.com" input failing
+                                  # with "Cannot navigate to invalid URL" (2026-09-21)
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
