@@ -213,6 +213,26 @@ HARD_RULES = [
                    "the rule itself is a legitimate general-purpose gap "
                    "worth closing regardless.",
     },
+    {
+        "name": "LeaseLeads",
+        "category": "platform",
+        "patterns": [
+            "powered by leaseleads",
+            "leaseleads",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on liverashaaudubon.com: explicit footer "
+                   "credit 'Powered by LeaseLeads' with logo. LeaseLeads "
+                   "is a real multifamily website vendor (validated in "
+                   "the Revyse vendor research earlier). Underlying CMS on "
+                   "this site is WordPress (wp-content/) -- same "
+                   "agency-plus-engine pattern as Jonah Digital+WordPress "
+                   "and Poetic+Webflow, report both. Included the bare "
+                   "'leaseleads' word from the start (not just the full "
+                   "phrase) given the Repli/MultiHub lesson earlier today: "
+                   "brand credits are often logo IMAGES, not adjacent "
+                   "plain text, so phrase-only patterns can silently miss.",
+    },
     # ---------------------------------------------------------------
     # PMS rules
     # ---------------------------------------------------------------
