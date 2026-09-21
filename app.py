@@ -17,7 +17,7 @@ import streamlit as st
 from fetcher import fetch_site
 from fetcher_js import fetch_rendered_html
 from fingerprints import check_hard_rules
-from partner_match import load_all_partner_names, find_partner_mentions, build_signal_text_for_matching
+from partner_match import load_all_partner_names, find_partner_mentions, build_signal_text_for_matching, filter_out_already_reported
 from ai_fallback import extract_signals, classify_with_ai
 
 st.set_page_config(page_title="Property Tech Detector", page_icon="\U0001F50D", layout="centered")
@@ -140,6 +140,17 @@ if go and url:
     with st.spinner("Checking for known partners..."):
         signal_text = build_signal_text_for_matching(signals)
         partner_hits = find_partner_mentions(signal_text, partner_names["all_partners"])
+        # Don't repeat something already shown as the Website Platform or
+        # PMS answer (with real detail) as bare noise in this generic list
+        # too -- see partner_match.filter_out_already_reported.
+        already_shown = (
+            [m["name"] for m in platform_matches] + [m["name"] for m in pms_matches]
+        )
+        if ai_result["platform"]:
+            already_shown.append(ai_result["platform"])
+        if ai_result["pms"]:
+            already_shown.append(ai_result["pms"])
+        partner_hits = filter_out_already_reported(partner_hits, already_shown)
 
     # ======================================================================
     # RESULTS
