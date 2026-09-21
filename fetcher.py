@@ -36,18 +36,35 @@ SUBPAGE_CANDIDATES = [
 
 
 def _robots_allows(base_url: str, path: str) -> bool:
-    """Check robots.txt before fetching. Fails open (allows) if robots.txt
-    itself can't be fetched or parsed -- most sites don't have one, and we
-    don't want a network hiccup to be mistaken for a real disallow."""
+    """Check robots.txt before fetching.
+
+    IMPORTANT: does NOT use urllib.robotparser's built-in fetcher. That
+    fetcher sends a generic, unbranded request with no real headers --
+    many property sites sit behind bot-protection services (Cloudflare,
+    etc.) that will 403 a request like that even though the actual page
+    content is fine for a normal-looking request. Python's robotparser
+    has documented behavior of treating a 403 on robots.txt as "disallow
+    everything," which produces false "blocked" results on sites that
+    aren't really blocked at all -- caught this in testing 2026-09-21
+    after two real, working-looking sites both got flagged.
+
+    Fetches robots.txt ourselves with the same request setup as the rest
+    of this tool, and only treats an explicit 200-response "Disallow"
+    rule as a real block. Any fetch failure (403, timeout, DNS error,
+    robots.txt not existing, etc.) fails OPEN -- we allow the fetch and
+    let the real page request be the actual test of reachability.
+    """
     try:
         parsed = urlparse(base_url)
         robots_url = f"{parsed.scheme}://{parsed.netloc}/robots.txt"
+        resp = requests.get(robots_url, timeout=TIMEOUT_SECONDS, headers={"User-Agent": USER_AGENT})
+        if resp.status_code != 200:
+            return True  # no usable robots.txt -- fail open, don't assume blocked
         rp = urllib.robotparser.RobotFileParser()
-        rp.set_url(robots_url)
-        rp.read()
+        rp.parse(resp.text.splitlines())
         return rp.can_fetch(USER_AGENT, urljoin(base_url, path))
     except Exception:
-        return True  # fail open
+        return True  # fail open -- a robots.txt fetch problem is not proof of a real block
 
 
 def _try_wayback(url: str) -> str | None:
@@ -135,13 +152,31 @@ def fetch_site(url: str) -> dict:
             continue  # this subpage just doesn't exist / timed out -- fine, skip it
 
     if not html_chunks:
+        # Direct fetch failed for every candidate page -- before giving up,
+        # try the Wayback Machine. This covers real full-site blocks that
+        # don't get caught by the (now much more conservative) robots.txt
+        # check above, e.g. a WAF blocking the actual page requests too.
+        archived = _try_wayback(url)
+        if archived:
+            return {
+                "status": "ok",
+                "combined_html": archived,
+                "pages_fetched": [f"{url} (via Wayback Machine)"],
+                "used_wayback": True,
+                "note": "Could not fetch the live site directly (it may be "
+                        "blocking automated requests). Used the most recent "
+                        "Wayback Machine snapshot instead -- data may be "
+                        "slightly out of date.",
+            }
         return {
             "status": "no_data",
             "combined_html": "",
             "pages_fetched": [],
             "used_wayback": False,
-            "note": "Could not fetch any pages from this site (site may be "
-                    "down, or blocking requests in a way that isn't robots.txt).",
+            "note": "Could not fetch any pages from this site directly, and "
+                    "no Wayback Machine snapshot is available either. The "
+                    "site may be blocking automated requests, or may be "
+                    "down. Try checking manually.",
         }
 
     return {
