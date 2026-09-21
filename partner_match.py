@@ -16,7 +16,7 @@ via the ALIASES dict below -- add to this as more mismatches turn up.
 
 import csv
 import os
-import re
+import re  # noqa: F401 (used below for word-boundary matching)
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
@@ -63,34 +63,59 @@ def load_all_partner_names() -> dict:
     }
 
 
-def find_partner_mentions(html: str, partner_names: list[str]) -> list[dict]:
+def find_partner_mentions(signal_text: str, partner_names: list[str]) -> list[dict]:
     """
-    Scan raw HTML for mentions of any partner name (normalized substring
-    match) or any of its known aliases. Returns a list of
-    {"name": <CSV name as written>, "matched_as": <the actual string that hit>}.
+    Scan a NARROW slice of signal text (script/image/link domains + footer
+    area text -- see ai_fallback.extract_signals(), NOT the full raw page
+    HTML/body copy) for mentions of any partner name or its known aliases.
 
-    This deliberately does NOT try to be clever about distinguishing "this
-    partner's script is embedded" from "this partner's name happens to be
-    mentioned in passing" -- for a first pass, surfacing possible mentions
-    for a human (the AE) to glance at is the goal, not full certainty.
-    Categories like PMS/Website Platform use the hard rules for certainty;
-    this partner list is explicitly the lower-confidence / "worth a look"
-    tier, per how this tool was scoped.
+    IMPORTANT: this must NOT be called with the full page HTML. Partner
+    logos and integration credits live in domains (script src, img src)
+    and footer/badge areas -- not scattered through marketing prose. Early
+    testing (2026-09-21, parkplaceapartmentsclt.com) found that scanning
+    full-page body copy produces heavy false positives: short company
+    names like "Door", "Here", "Fetch", "Avo", "Further", "Landing" match
+    as ordinary English words used in the page's marketing copy (e.g.
+    "...easy access to your front door...", "...further questions...").
+    Narrowing to domains + footer text, plus a word-boundary regex match
+    (not raw substring) and a length floor, is the fix.
+
+    Returns [{"name": <CSV name as written>, "matched_as": <string that hit>}]
     """
-    html_lower = html.lower()
+    text_lower = signal_text.lower()
     matches = []
     seen = set()
 
     for name in partner_names:
         norm = _normalize(name)
-        if len(norm) < 3:
-            continue  # skip too-short names, too noisy (e.g. "AB")
+        if len(norm) < 5:
+            continue  # short names are too collision-prone with ordinary words
 
         candidates = [norm] + ALIASES.get(norm, [])
         for candidate in candidates:
-            if candidate in html_lower and name not in seen:
+            # word-boundary match, not raw substring -- "door" won't match
+            # inside "outdoor", and short/common words are already filtered
+            # by the length floor above
+            pattern = r'\b' + re.escape(candidate) + r'\b'
+            if re.search(pattern, text_lower) and name not in seen:
                 matches.append({"name": name, "matched_as": candidate})
                 seen.add(name)
                 break
 
     return matches
+
+
+def build_signal_text_for_matching(signals: dict) -> str:
+    """
+    Combine the narrow signal set (from ai_fallback.extract_signals) into
+    one string suitable for find_partner_mentions -- domains plus footer
+    text, deliberately excluding the full page body copy.
+    """
+    parts = (
+        signals.get("script_domains", [])
+        + signals.get("link_domains", [])
+        + signals.get("image_domains", [])
+        + signals.get("anchor_domains", [])
+        + [signals.get("footer_text_snippet", "") or ""]
+    )
+    return " ".join(parts)
