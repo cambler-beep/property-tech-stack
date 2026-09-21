@@ -1,63 +1,188 @@
 """
-fetcher_js.py
+fetcher.py
 
-A JavaScript-RENDERING fetcher using Playwright, as an alternative to
-fetcher.py's plain HTTP requests. This exists to catch content that only
-appears after a real browser runs JavaScript -- e.g. a chat widget SDK
-that builds its own asset URLs at runtime with no trace in the raw
-server-delivered HTML at all (a deeper case than the inline-script-body
-pattern fetcher.py's sibling module ai_fallback.py already catches).
+Fetches RAW HTML (script tags included -- this matters, see below) from
+a property website's homepage plus a handful of known subpages where
+PMS/partner widgets tend to hide.
 
-SCOPE AND AN INTENTIONAL LIMIT, READ BEFORE MODIFYING:
-This module is for RENDERING pages the way a real browser would -- running
-JS, letting the DOM settle -- not for evading a site's anti-bot security.
-It deliberately does NOT include: stealth/fingerprint-spoofing plugins,
-proxy rotation, CAPTCHA-solving, or any other technique whose specific
-purpose is to defeat Cloudflare Bot Manager or similar deliberate
-bot-detection systems. Sites that actively block automated access (see
-the README's "Entrata-integrated sites" note) are expected to still
-block this fetcher too -- that's an intentional line, not a bug to fix
-by adding evasion techniques on top of this. If a page renders, great;
-if a site detects and blocks a headless browser the same way it blocks a
-plain request, that's the site's security working as intended, and this
-tool should fall back to the plain fetcher / Wayback / "blocked" states
-in fetcher.py, not try harder to get through.
-
-DEPLOYMENT NOTE: Playwright needs real Chromium browser binaries, which
-Streamlit Community Cloud does not install by default. See README for
-the setup workaround (installing the browser on first run) and its
-real trade-offs (slow first load, fragility).
+IMPORTANT LESSON FROM MANUAL TESTING:
+A readable-text extraction (like a "reader mode" view) strips <script>
+tags entirely, which makes it structurally blind to embedded widgets
+like EliseAI/MeetElise or Tour24 -- those are delivered via
+<script src="..."> and never appear as visible page text. This fetcher
+deliberately grabs raw HTML for that reason. Hard rules and the AI
+fallback should both be given this raw HTML, not a cleaned/readable
+version.
 """
 
-from playwright.sync_api import sync_playwright
+import requests
+import urllib.robotparser
+from urllib.parse import urljoin, urlparse
 
-TIMEOUT_MS = 15000  # JS rendering is slower than a plain request -- budget for it
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+USER_AGENT = "Mozilla/5.0 (compatible; EngrainPropertyTechCheck/1.0; +internal-tool)"
+TIMEOUT_SECONDS = 10
+
+# Common subpage paths where PMS / partner widgets tend to live.
+# Not every site will have all of these -- 404s are just skipped.
+SUBPAGE_CANDIDATES = [
+    "",  # homepage itself
+    "/residents/", "/residents",
+    "/resident-portal/", "/resident-portal",
+    "/schedule-a-tour/", "/schedule-a-tour",
+    "/self-guided-tours/", "/self-guided-tours",
+    "/contact/", "/contact-us/", "/contact",
+    "/apply/", "/apply-now/",
+]
 
 
-def fetch_rendered_html(url: str) -> dict:
-    """
-    Load a page in a real (headless) browser, let JS run, and return the
-    fully rendered HTML. No stealth/evasion techniques -- see module
-    docstring. A site that blocks this the way it blocks a plain request
-    is expected behavior, not something to route around further.
+def _robots_allows(base_url: str, path: str) -> bool:
+    """Check robots.txt before fetching.
 
-    Returns:
-        {"status": "ok" | "error", "html": str, "note": str}
+    IMPORTANT: does NOT use urllib.robotparser's built-in fetcher. That
+    fetcher sends a generic, unbranded request with no real headers --
+    many property sites sit behind bot-protection services (Cloudflare,
+    etc.) that will 403 a request like that even though the actual page
+    content is fine for a normal-looking request. Python's robotparser
+    has documented behavior of treating a 403 on robots.txt as "disallow
+    everything," which produces false "blocked" results on sites that
+    aren't really blocked at all -- caught this in testing 2026-09-21
+    after two real, working-looking sites both got flagged.
+
+    Fetches robots.txt ourselves with the same request setup as the rest
+    of this tool, and only treats an explicit 200-response "Disallow"
+    rule as a real block. Any fetch failure (403, timeout, DNS error,
+    robots.txt not existing, etc.) fails OPEN -- we allow the fetch and
+    let the real page request be the actual test of reachability.
     """
     try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page(user_agent=USER_AGENT)
-            page.set_default_timeout(TIMEOUT_MS)
-            try:
-                page.goto(url, wait_until="networkidle")
-            except Exception:
-                # networkidle can time out on pages with long-polling/analytics
-                # that never go fully idle -- fall back to whatever loaded
-                page.goto(url, wait_until="domcontentloaded")
-            html = page.content()
-            browser.close()
-            return {"status": "ok", "html": html, "note": f"Rendered {len(html)} chars of JS-executed HTML."}
-    except Exception as e:
-        return {"status": "error", "html": "", "note": f"JS rendering failed: {e}"}
+        parsed = urlparse(base_url)
+        robots_url = f"{parsed.scheme}://{parsed.netloc}/robots.txt"
+        resp = requests.get(robots_url, timeout=TIMEOUT_SECONDS, headers={"User-Agent": USER_AGENT})
+        if resp.status_code != 200:
+            return True  # no usable robots.txt -- fail open, don't assume blocked
+        rp = urllib.robotparser.RobotFileParser()
+        rp.parse(resp.text.splitlines())
+        return rp.can_fetch(USER_AGENT, urljoin(base_url, path))
+    except Exception:
+        return True  # fail open -- a robots.txt fetch problem is not proof of a real block
+
+
+def _try_wayback(url: str) -> str | None:
+    """Fallback: ask the Wayback Machine's public availability API for the
+    most recent snapshot of this URL. Returns raw HTML of the snapshot,
+    or None if nothing is available."""
+    try:
+        api_url = f"https://archive.org/wayback/available?url={url}"
+        resp = requests.get(api_url, timeout=TIMEOUT_SECONDS)
+        data = resp.json()
+        snapshot = data.get("archived_snapshots", {}).get("closest")
+        if not snapshot or not snapshot.get("available"):
+            return None
+        snapshot_url = snapshot["url"]
+        page = requests.get(snapshot_url, timeout=TIMEOUT_SECONDS, headers={"User-Agent": USER_AGENT})
+        page.raise_for_status()
+        return page.text
+    except Exception:
+        return None
+
+
+def fetch_site(url: str) -> dict:
+    """
+    Fetch homepage + known subpages for a property URL.
+
+    Returns:
+        {
+            "status": "ok" | "blocked" | "no_data",
+            "combined_html": str,       # all successfully fetched pages, concatenated
+            "pages_fetched": [str],     # which URLs actually succeeded
+            "used_wayback": bool,
+            "note": str,                # human-readable explanation, esp. for failures
+        }
+    """
+    if not url.startswith("http"):
+        url = "https://" + url
+
+    parsed = urlparse(url)
+    base_url = f"{parsed.scheme}://{parsed.netloc}"
+
+    if not _robots_allows(base_url, "/"):
+        # Blocked by robots.txt -- try Wayback Machine as fallback
+        archived = _try_wayback(url)
+        if archived:
+            return {
+                "status": "ok",
+                "combined_html": archived,
+                "pages_fetched": [f"{url} (via Wayback Machine)"],
+                "used_wayback": True,
+                "note": "Live site disallows automated access (robots.txt). "
+                        "Used the most recent Wayback Machine snapshot instead "
+                        "-- data may be slightly out of date.",
+            }
+        else:
+            return {
+                "status": "blocked",
+                "combined_html": "",
+                "pages_fetched": [],
+                "used_wayback": False,
+                "note": "Site disallows automated access (robots.txt) and no "
+                        "Wayback Machine snapshot is available. Try checking "
+                        "manually.",
+            }
+
+    html_chunks = []
+    pages_fetched = []
+
+    for subpath in SUBPAGE_CANDIDATES:
+        page_url = urljoin(base_url, subpath)
+        try:
+            resp = requests.get(
+                page_url,
+                timeout=TIMEOUT_SECONDS,
+                headers={"User-Agent": USER_AGENT},
+                allow_redirects=True,
+            )
+            if resp.status_code == 200:
+                # dedupe: /contact and /contact/ often redirect to the same
+                # final URL -- skip if we already have this exact page
+                if resp.url in pages_fetched:
+                    continue
+                html_chunks.append(resp.text)
+                pages_fetched.append(resp.url)
+        except Exception:
+            continue  # this subpage just doesn't exist / timed out -- fine, skip it
+
+    if not html_chunks:
+        # Direct fetch failed for every candidate page -- before giving up,
+        # try the Wayback Machine. This covers real full-site blocks that
+        # don't get caught by the (now much more conservative) robots.txt
+        # check above, e.g. a WAF blocking the actual page requests too.
+        archived = _try_wayback(url)
+        if archived:
+            return {
+                "status": "ok",
+                "combined_html": archived,
+                "pages_fetched": [f"{url} (via Wayback Machine)"],
+                "used_wayback": True,
+                "note": "Could not fetch the live site directly (it may be "
+                        "blocking automated requests). Used the most recent "
+                        "Wayback Machine snapshot instead -- data may be "
+                        "slightly out of date.",
+            }
+        return {
+            "status": "no_data",
+            "combined_html": "",
+            "pages_fetched": [],
+            "used_wayback": False,
+            "note": "Could not fetch any pages from this site directly, and "
+                    "no Wayback Machine snapshot is available either. The "
+                    "site may be blocking automated requests, or may be "
+                    "down. Try checking manually.",
+        }
+
+    return {
+        "status": "ok",
+        "combined_html": "\n".join(html_chunks),
+        "pages_fetched": pages_fetched,
+        "used_wayback": False,
+        "note": f"Fetched {len(pages_fetched)} page(s).",
+    }
