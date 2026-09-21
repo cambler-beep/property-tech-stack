@@ -233,6 +233,24 @@ HARD_RULES = [
                    "brand credits are often logo IMAGES, not adjacent "
                    "plain text, so phrase-only patterns can silently miss.",
     },
+    {
+        "name": "FINE",
+        "category": "platform",
+        "patterns": [
+            "wearefine.com",
+            "brought to you by fine",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on thegantrydc.com: explicit HTML comment "
+                   "'This handcrafted digital experience brought to you "
+                   "by FINE: wearefine.com.' -- about as unambiguous a "
+                   "credit as exists. Underlying CMS is FAE (Fine Admin "
+                   "Engine), FINE's own proprietary open-source Rails CMS "
+                   "-- same agency-plus-engine pattern as other rules here, "
+                   "but FAE isn't independently fingerprintable the way "
+                   "WordPress/Webflow are (it's not widely used outside "
+                   "FINE's own client base), so just report FINE.",
+    },
     # ---------------------------------------------------------------
     # PMS rules
     # ---------------------------------------------------------------
