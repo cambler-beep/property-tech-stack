@@ -34,6 +34,15 @@ ALIASES = {
                                     # also missing "funnel" as a prefix of a
                                     # longer compound word with no separator.
                                     # Confirmed via thegantrydc.com (2026-09-21).
+    "apartment list": ["lea.ai", "lea ai"],  # CSV says "Apartment List", live
+                                    # product is an AI chat widget branded
+                                    # "Lea" (domain ai-chat-frontend.lea.ai).
+                                    # BuiltWith independently confirms "Lea
+                                    # AparmentList" [their typo] as a real
+                                    # leasing/lead-gen tool -- same company,
+                                    # different sub-brand for the AI chat
+                                    # product. Confirmed via livebakerblock.com
+                                    # (2026-09-21).
     # add more as discovered, e.g.:
     # "some csv name": ["actual live product/brand name"],
 }
