@@ -35,7 +35,14 @@ Streamlit Community Cloud, using the Gemini API.
    GEMINI_API_KEY = "your-key-here"
    ```
    (Reuse the same key you already have approved for Transition Researcher.)
-4. If you ever update the partner CSVs, just replace the files in `data/` and
+4. Make sure `packages.txt` is also in the repo root (not just
+   `requirements.txt`) -- it installs the Linux system libraries Chromium
+   needs to actually run for the "Also render with JavaScript" feature,
+   which Streamlit Cloud doesn't include by default. Without it, JS
+   rendering fails with a "cannot open shared object file" error -- but
+   the rest of the app still works fine either way, this is a soft
+   failure by design (see the try/except in app.py's JS rendering block).
+5. If you ever update the partner CSVs, just replace the files in `data/` and
    push — no code changes needed.
 
 ## Known limitations (read before trusting results blindly)
