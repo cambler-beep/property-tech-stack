@@ -37,6 +37,20 @@ def extract_signals(html: str) -> dict:
     img_srcs = re.findall(r'<img[^>]+src=["\']([^"\']+)["\']', html, re.I)
     anchor_hrefs = re.findall(r'<a[^>]+href=["\']([^"\']+)["\']', html, re.I)
 
+    # ALSO scan the TEXT CONTENT of inline <script> blocks for domain-like
+    # strings -- a lot of widget loaders (chat bots, tour schedulers) use
+    # a small inline bootstrap script like:
+    #   s.src = "https://cdn.somevendor.com/widget.js"; document.head.appendChild(s)
+    # where the target domain is plain JS text inside the script body, NOT
+    # an HTML attribute -- the src=/href= regexes above miss this entirely.
+    # Caught this via EliseAI on thejamesonhomewood.com (2026-09-21):
+    # DevTools showed cdn.eliseai.com loading live, but it wasn't in any
+    # src=/href= attribute -- almost certainly this inline-loader pattern.
+    inline_script_bodies = re.findall(r'<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>', html, re.I | re.S)
+    inline_script_domains = []
+    for body in inline_script_bodies:
+        inline_script_domains += re.findall(r'https?://([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})', body)
+
     def domains_from(urls):
         domains = set()
         for u in urls:
@@ -70,6 +84,7 @@ def extract_signals(html: str) -> dict:
         "link_domains": domains_from(link_hrefs),
         "image_domains": domains_from(img_srcs),
         "anchor_domains": domains_from(anchor_hrefs),
+        "inline_script_domains": sorted(set(inline_script_domains)),
         "meta_generator": generator,
         "footer_text_snippet": footer_text[:1500],
     }
