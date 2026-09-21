@@ -234,6 +234,26 @@ HARD_RULES = [
                    "plain text, so phrase-only patterns can silently miss.",
     },
     {
+        "name": "Yardi (REACH by RentCafe Websites)",
+        "category": "platform",
+        "patterns": [
+            "cdngeneralmvc.rentcafe.com",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on livebakerblock.com: CSS/JS assets served "
+                   "from cdngeneralmvc.rentcafe.com. Same 'one vendor, two "
+                   "product roles' pattern as RealPage (LOFT for PMS + "
+                   "LeaseStar for the website itself, confirmed earlier on "
+                   "parkplaceapartmentsclt.com) -- Yardi's RentCafe brand "
+                   "covers both the resident/PMS side (SecureCafe login, "
+                   "already a separate PMS rule) AND their own website "
+                   "product, 'REACH by RentCafe Websites' (a real, "
+                   "Revyse-validated vendor from the earlier research). "
+                   "Report both when both fire, same as RealPage -- not "
+                   "competing answers, two real facts about the same "
+                   "parent company.",
+    },
+    {
         "name": "FINE",
         "category": "platform",
         "patterns": [
