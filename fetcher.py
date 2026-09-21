@@ -34,6 +34,18 @@ SUBPAGE_CANDIDATES = [
     "/apply/", "/apply-now/",
 ]
 
+# Same candidates, but WITHOUT a leading slash, for joining relative to the
+# entered URL's own directory rather than the domain root -- see the big
+# comment in fetch_site() below for why this exists.
+RELATIVE_SUBPAGE_CANDIDATES = [
+    "residents/", "residents",
+    "resident-portal/", "resident-portal",
+    "schedule-a-tour/", "schedule-a-tour",
+    "self-guided-tours/", "self-guided-tours",
+    "contact/", "contact-us/", "contact",
+    "apply/", "apply-now/",
+]
+
 
 def _robots_allows(base_url: str, path: str) -> bool:
     """Check robots.txt before fetching.
@@ -104,8 +116,9 @@ def fetch_site(url: str) -> dict:
 
     parsed = urlparse(url)
     base_url = f"{parsed.scheme}://{parsed.netloc}"
+    entered_url = url  # the exact URL as given, full path intact -- see below
 
-    if not _robots_allows(base_url, "/"):
+    if not _robots_allows(base_url, parsed.path or "/"):
         # Blocked by robots.txt -- try Wayback Machine as fallback
         archived = _try_wayback(url)
         if archived:
@@ -132,8 +145,33 @@ def fetch_site(url: str) -> dict:
     html_chunks = []
     pages_fetched = []
 
+    # Build the full list of candidate URLs to check:
+    #  1. The EXACT URL the user entered, always first -- this was
+    #     previously missing entirely. base_url below strips the path down
+    #     to just the domain, so every candidate used to be joined against
+    #     the bare root -- meaning a specific property page under a larger
+    #     portfolio site (e.g. cortland.com/apartments/cortland-riverview/)
+    #     never actually got fetched at all. The tool silently analyzed
+    #     just the parent corporate homepage instead, with no indication
+    #     anything was wrong. Caught via cortland.com (2026-09-21) -- same
+    #     underlying issue as the earlier Simpson Property Group case, but
+    #     worse there it happened to still report an honest "not detected"
+    #     for a genuinely custom site; here it would have silently
+    #     attributed the corporate homepage's tech stack to the wrong page.
+    #  2. Root-domain candidates (homepage + common top-level subpages) --
+    #     still useful for single-property-domain sites, where the
+    #     "corporate homepage" IS the property page.
+    #  3. Candidates relative to the ENTERED URL's own directory, for
+    #     portfolio sites where resident/contact/apply pages nest under
+    #     the property's own subpath rather than the domain root.
+    candidate_urls = [entered_url]
     for subpath in SUBPAGE_CANDIDATES:
-        page_url = urljoin(base_url, subpath)
+        candidate_urls.append(urljoin(base_url, subpath))
+    if parsed.path and parsed.path != "/":
+        for subpath in RELATIVE_SUBPAGE_CANDIDATES:
+            candidate_urls.append(urljoin(entered_url, subpath))
+
+    for page_url in candidate_urls:
         try:
             resp = requests.get(
                 page_url,
@@ -142,14 +180,15 @@ def fetch_site(url: str) -> dict:
                 allow_redirects=True,
             )
             if resp.status_code == 200:
-                # dedupe: /contact and /contact/ often redirect to the same
-                # final URL -- skip if we already have this exact page
+                # dedupe: multiple candidates often resolve to the same
+                # final URL (e.g. the entered URL and a root-level
+                # redirect) -- skip if we already have this exact page
                 if resp.url in pages_fetched:
                     continue
                 html_chunks.append(resp.text)
                 pages_fetched.append(resp.url)
         except Exception:
-            continue  # this subpage just doesn't exist / timed out -- fine, skip it
+            continue  # this candidate just doesn't exist / timed out -- fine, skip it
 
     if not html_chunks:
         # Direct fetch failed for every candidate page -- before giving up,
