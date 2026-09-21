@@ -220,20 +220,22 @@ HARD_RULES = [
         "category": "pms",
         "patterns": [
             "securecafenet.com",
+            "securecafe.com",
             "website design by rentcafe",
             "yardi systems, inc",
         ],
         "confidence": "high",
-        "source": "Confirmed on theweldondenton.com: Resident Portal button "
-                   "links to theweldonapts.securecafenet.com -- SecureCafe "
-                   "is Yardi/RentCafe's resident login product. Footer also "
-                   "explicitly credits 'Website Design by RentCafe (c) "
-                   "Yardi Systems, Inc.' Notable gap this closes: despite "
+        "source": "Confirmed on theweldondenton.com AND residencesat1125.com "
+                   "(2026-09-21) -- two different SecureCafe domain variants "
+                   "seen (securecafenet.com and securecafe.com, without "
+                   "'net') -- both now covered. Footer credit 'Website "
+                   "Design By RentCafe (c) Yardi Systems, Inc.' independently "
+                   "confirms both too. Notable gap this closes: despite "
                    "researching Yardi/RentCafe extensively earlier (see the "
                    "w3techs mislabeling incident with Entrata), this is the "
                    "first time we've had an actual confirmed live fingerprint "
                    "for it -- one of the biggest PMS vendors in the industry "
-                   "had NO hard rule until this test (2026-09-21).",
+                   "had NO hard rule until these two tests.",
     },
 ]
 
