@@ -131,6 +131,31 @@ HARD_RULES = [
                    "builder and WordPress as the underlying CMS, not as "
                    "competing answers.",
     },
+    {
+        "name": "Poetic",
+        "category": "platform",
+        "patterns": [
+            "poetic.io",
+            "website by poetic",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on thejamesonhomewood.com: explicit footer "
+                   "credit 'Website by Poetic' linking to poetic.io.",
+    },
+    {
+        "name": "Webflow",
+        "category": "platform",
+        "patterns": [
+            "website-files.com",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on thejamesonhomewood.com: all assets served "
+                   "from cdn.prod.website-files.com, Webflow's own asset "
+                   "CDN domain. Same pattern as WordPress -- this is the "
+                   "underlying engine; report alongside an agency rule "
+                   "(e.g. Poetic) if one also fires, not as a conflicting "
+                   "answer.",
+    },
     # ---------------------------------------------------------------
     # PMS rules
     # ---------------------------------------------------------------
@@ -168,11 +193,27 @@ HARD_RULES = [
         "patterns": [
             "activebuilding.com",
         ],
-        "confidence": "moderate",
-        "source": "Not seen live today, but LOFT explicitly 'replaces "
-                   "ActiveBuilding' per RealPage's own product pages -- "
-                   "older sites not yet migrated to LOFT may still show "
-                   "this domain. Report as RealPage PMS either way.",
+        "confidence": "high",
+        "source": "Confirmed on thejamesonhomewood.com: Resident Portal "
+                   "links to thejamesonal.activebuilding.com. LOFT "
+                   "explicitly 'replaces ActiveBuilding' per RealPage's "
+                   "own product pages -- older/not-yet-migrated sites "
+                   "still show this domain. Report as RealPage PMS either "
+                   "way.",
+    },
+    {
+        "name": "RealPage (online leasing)",
+        "category": "pms",
+        "patterns": [
+            "onlineleasing.realpage.com",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on thejamesonhomewood.com: 'Lease Now' button "
+                   "links to a numbered onlineleasing.realpage.com "
+                   "subdomain. A third distinct RealPage domain pattern "
+                   "(alongside loftliving.com and activebuilding.com) -- "
+                   "RealPage clearly has several differently-branded "
+                   "products that all indicate the same PMS vendor.",
     },
 ]
 
