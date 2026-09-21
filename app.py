@@ -15,7 +15,7 @@ import streamlit as st
 
 from fetcher import fetch_site
 from fingerprints import check_hard_rules
-from partner_match import load_all_partner_names, find_partner_mentions
+from partner_match import load_all_partner_names, find_partner_mentions, build_signal_text_for_matching
 from ai_fallback import extract_signals, classify_with_ai
 
 st.set_page_config(page_title="Property Tech Detector", page_icon="\U0001F50D", layout="centered")
@@ -68,12 +68,18 @@ if go and url:
     needs_platform = len(platform_matches) == 0
     needs_pms = len(pms_matches) == 0
 
+    # Extract the narrow signal set (script/image/link domains + footer text)
+    # once -- used by BOTH the AI fallback and partner matching. Partner
+    # matching deliberately does NOT scan the full page body copy: short
+    # company names collide with ordinary English words in marketing prose
+    # (e.g. "Door", "Here", "Fetch" matching "...front door...", "...here...").
+    signals = extract_signals(html)
+
     # --- AI fallback for anything hard rules didn't catch ----------------
     ai_result = {"platform": None, "pms": None, "reasoning": ""}
     if (needs_platform or needs_pms):
         if gemini_api_key:
             with st.spinner("Checking with AI for anything not in the known list..."):
-                signals = extract_signals(html)
                 ai_result = classify_with_ai(
                     signals,
                     known_pms=partner_names["pms"],
@@ -90,7 +96,8 @@ if go and url:
 
     # --- Partner mentions -------------------------------------------------
     with st.spinner("Checking for known partners..."):
-        partner_hits = find_partner_mentions(html, partner_names["all_partners"])
+        signal_text = build_signal_text_for_matching(signals)
+        partner_hits = find_partner_mentions(signal_text, partner_names["all_partners"])
 
     # ======================================================================
     # RESULTS
