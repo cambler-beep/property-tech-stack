@@ -108,12 +108,12 @@ HARD_RULES = [
             "irp.cdn-website.com",
             "cdn-website.com",
         ],
-        "confidence": "moderate",
-        "source": "Seen on prproperties.org (central-flats page): asset CDN "
-                   "on irp.cdn-website.com, meta 'dm:lcp-preload' tag pattern "
-                   "consistent with Duda's rendering pipeline. Not "
-                   "independently re-confirmed on a second site -- flag as "
-                   "moderate confidence until cross-checked again.",
+        "confidence": "high",
+        "source": "Confirmed independently on TWO sites: prproperties.org "
+                   "(central-flats page) and songbirdkirkwood.com -- asset "
+                   "CDN on irp.cdn-website.com both times. Upgraded from "
+                   "moderate to high confidence after the second "
+                   "independent match (2026-09-21).",
     },
     {
         "name": "WordPress",
@@ -214,6 +214,26 @@ HARD_RULES = [
                    "(alongside loftliving.com and activebuilding.com) -- "
                    "RealPage clearly has several differently-branded "
                    "products that all indicate the same PMS vendor.",
+    },
+    {
+        "name": "Yardi (via RentCafe / SecureCafe)",
+        "category": "pms",
+        "patterns": [
+            "securecafenet.com",
+            "website design by rentcafe",
+            "yardi systems, inc",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on theweldondenton.com: Resident Portal button "
+                   "links to theweldonapts.securecafenet.com -- SecureCafe "
+                   "is Yardi/RentCafe's resident login product. Footer also "
+                   "explicitly credits 'Website Design by RentCafe (c) "
+                   "Yardi Systems, Inc.' Notable gap this closes: despite "
+                   "researching Yardi/RentCafe extensively earlier (see the "
+                   "w3techs mislabeling incident with Entrata), this is the "
+                   "first time we've had an actual confirmed live fingerprint "
+                   "for it -- one of the biggest PMS vendors in the industry "
+                   "had NO hard rule until this test (2026-09-21).",
     },
 ]
 
