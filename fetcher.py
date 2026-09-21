@@ -125,6 +125,10 @@ def fetch_site(url: str) -> dict:
                 allow_redirects=True,
             )
             if resp.status_code == 200:
+                # dedupe: /contact and /contact/ often redirect to the same
+                # final URL -- skip if we already have this exact page
+                if resp.url in pages_fetched:
+                    continue
                 html_chunks.append(resp.text)
                 pages_fetched.append(resp.url)
         except Exception:
