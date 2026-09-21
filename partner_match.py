@@ -116,6 +116,7 @@ def build_signal_text_for_matching(signals: dict) -> str:
         + signals.get("link_domains", [])
         + signals.get("image_domains", [])
         + signals.get("anchor_domains", [])
+        + signals.get("inline_script_domains", [])
         + [signals.get("footer_text_snippet", "") or ""]
     )
     return " ".join(parts)
