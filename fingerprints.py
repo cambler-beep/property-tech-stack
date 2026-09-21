@@ -130,16 +130,25 @@ HARD_RULES = [
         "patterns": [
             "website design by repli",
             "powered by multihub",
+            "multihub",
+            "repli.io",
+            "alt=\"repli\"",
         ],
-        "confidence": "high",
-        "source": "Confirmed on songbirdkirkwood.com: explicit footer "
-                   "credits 'Website Design by Repli' and 'Powered by "
-                   "MultiHub' (Repli's product, confirmed as a real "
-                   "multifamily platform in the Revyse vendor research "
-                   "earlier -- 'MultiHub is the property marketing "
-                   "platform for multifamily, built by Repli'). This is "
-                   "also likely the TRUE platform for the Duda "
-                   "false-positive case above on this same site.",
+        "confidence": "moderate",
+        "source": "Confirmed on songbirdkirkwood.com: footer credits "
+                   "'Website Design by Repli' / 'Powered by MultiHub' "
+                   "(Repli's product, confirmed as a real multifamily "
+                   "platform in the Revyse vendor research earlier -- "
+                   "'MultiHub is the property marketing platform for "
+                   "multifamily, built by Repli'). BROADENED after the "
+                   "full-phrase patterns failed to fire live: the brand "
+                   "credits render as logo IMAGES, not plain adjacent "
+                   "text, so 'website design by repli' as one contiguous "
+                   "string never actually appears in the raw HTML (an "
+                   "<img> tag sits between the words). Added bare "
+                   "'multihub' as the most distinctive single-word "
+                   "fallback -- lower confidence since it's broader and "
+                   "less specifically tied to a confirmed exact string.",
     },
     {
         "name": "WordPress",
