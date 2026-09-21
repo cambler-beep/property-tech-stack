@@ -156,6 +156,28 @@ HARD_RULES = [
                    "(e.g. Poetic) if one also fires, not as a conflicting "
                    "answer.",
     },
+    {
+        "name": "Wix",
+        "category": "platform",
+        "patterns": [
+            "wixstatic.com",
+            "parastorage.com",
+            "wix.com website builder",
+        ],
+        "confidence": "high",
+        "source": "Well-established, widely-documented Wix fingerprint "
+                   "(same treatment as the WordPress rule -- general "
+                   "platform knowledge, not tied to one specific live test). "
+                   "Added after garrettnorthpowers.com came back "
+                   "'Not detected' despite BuiltWith showing it's built on "
+                   "Wix Studio -- a real gap, no Wix rule existed before "
+                   "this (2026-09-21). NOTE: BuiltWith's own crawler also "
+                   "shows 'Cloudflare Blocked' / 403 on this specific site, "
+                   "so this fix may not fully resolve THAT case if the site "
+                   "itself is hard to reach for any automated tool -- but "
+                   "the rule itself is a legitimate general-purpose gap "
+                   "worth closing regardless.",
+    },
     # ---------------------------------------------------------------
     # PMS rules
     # ---------------------------------------------------------------
@@ -236,6 +258,25 @@ HARD_RULES = [
                    "first time we've had an actual confirmed live fingerprint "
                    "for it -- one of the biggest PMS vendors in the industry "
                    "had NO hard rule until these two tests.",
+    },
+    {
+        "name": "Entrata (embedded widget)",
+        "category": "pms",
+        "patterns": [
+            "entrata.com",
+        ],
+        "confidence": "moderate",
+        "source": "Distinct from the 'Entrata' PLATFORM rule above, which "
+                   "only fires on Entrata's specific asset-hosting "
+                   "subdomains (i.e. when Entrata built the whole site). "
+                   "This broader, lower-confidence rule catches Entrata "
+                   "showing up as just an embedded leasing/application "
+                   "widget on a site built with something else entirely -- "
+                   "seen via BuiltWith on garrettnorthpowers.com (a Wix "
+                   "site) listing 'Entrata - Property Management Software' "
+                   "under Widgets, not CMS. Broader substring = more "
+                   "false-positive risk than the specific asset-subdomain "
+                   "rule, hence moderate not high confidence.",
     },
 ]
 
