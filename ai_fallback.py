@@ -26,10 +26,16 @@ def extract_signals(html: str) -> dict:
     """Pull out the lightweight signals worth sending to the model,
     instead of the full raw HTML (which can be huge and mostly noise)."""
 
-    # All external script/link src domains
+    # All external script/link/anchor src|href domains.
+    # Anchor (<a href>) links matter a lot for partner detection: a footer
+    # "we're on Zillow" badge is typically just a clickable logo image
+    # wrapped in <a href="zillow.com">, with no visible text -- missing
+    # anchor hrefs means missing most real footer partner badges (caught
+    # in testing 2026-09-21).
     script_srcs = re.findall(r'<script[^>]+src=["\']([^"\']+)["\']', html, re.I)
     link_hrefs = re.findall(r'<link[^>]+href=["\']([^"\']+)["\']', html, re.I)
     img_srcs = re.findall(r'<img[^>]+src=["\']([^"\']+)["\']', html, re.I)
+    anchor_hrefs = re.findall(r'<a[^>]+href=["\']([^"\']+)["\']', html, re.I)
 
     def domains_from(urls):
         domains = set()
@@ -45,9 +51,17 @@ def extract_signals(html: str) -> dict:
         html, re.I)
     generator = generator_match.group(1) if generator_match else None
 
-    # Rough footer text -- last ~3000 chars of the page tends to hold
-    # copyright lines, "powered by" credits, legal links
-    footer_snippet = html[-3000:]
+    # Prefer an actual <footer>...</footer> tag if the page has one -- this
+    # is far more reliable than a "last N characters" guess, which on short
+    # pages just grabs the entire body copy (defeating the point of
+    # narrowing to footer-only text; caught this in testing 2026-09-21).
+    footer_tag_match = re.search(r'<footer\b.*?</footer>', html, re.I | re.S)
+    if footer_tag_match:
+        footer_snippet = footer_tag_match.group(0)
+    else:
+        # Fallback: last ~3000 chars, where copyright/credit lines usually
+        # live if there's no explicit <footer> tag.
+        footer_snippet = html[-3000:]
     footer_text = re.sub(r'<[^>]+>', ' ', footer_snippet)
     footer_text = re.sub(r'\s+', ' ', footer_text).strip()
 
@@ -55,6 +69,7 @@ def extract_signals(html: str) -> dict:
         "script_domains": domains_from(script_srcs),
         "link_domains": domains_from(link_hrefs),
         "image_domains": domains_from(img_srcs),
+        "anchor_domains": domains_from(anchor_hrefs),
         "meta_generator": generator,
         "footer_text_snippet": footer_text[:1500],
     }
