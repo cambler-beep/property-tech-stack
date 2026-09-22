@@ -16,7 +16,7 @@ import streamlit as st
 
 from fetcher import fetch_site
 from fetcher_js import fetch_rendered_html
-from fingerprints import check_hard_rules
+from fingerprints import check_hard_rules, filter_to_highest_confidence
 from partner_match import load_all_partner_names, find_partner_mentions, build_signal_text_for_matching, filter_out_already_reported
 from ai_fallback import extract_signals, classify_with_ai
 
@@ -160,10 +160,18 @@ if go and url:
 
     col1, col2 = st.columns(2)
 
+    # Apply the high-confidence-wins filter for DISPLAY only -- the raw,
+    # unfiltered platform_matches/pms_matches are still what's used above
+    # for needs_platform/needs_pms and the partner-dedup list, since those
+    # decisions should reflect everything we actually know, not just what
+    # we choose to show.
+    platform_display = filter_to_highest_confidence(platform_matches)
+    pms_display = filter_to_highest_confidence(pms_matches)
+
     with col1:
         st.markdown("**Website Platform**")
-        if platform_matches:
-            for m in platform_matches:
+        if platform_display:
+            for m in platform_display:
                 badge = "🟢" if m["confidence"] == "high" else "🟡"
                 st.write(f"{badge} **{m['name']}**")
                 st.caption(f"Confirmed pattern: `{m['matched_pattern']}`")
@@ -175,8 +183,8 @@ if go and url:
 
     with col2:
         st.markdown("**PMS**")
-        if pms_matches:
-            for m in pms_matches:
+        if pms_display:
+            for m in pms_display:
                 badge = "🟢" if m["confidence"] == "high" else "🟡"
                 st.write(f"{badge} **{m['name']}**")
                 st.caption(f"Confirmed pattern: `{m['matched_pattern']}`")
