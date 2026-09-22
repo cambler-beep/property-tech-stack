@@ -75,13 +75,24 @@ HARD_RULES = [
             "entrata, inc.",
             "entrata's accessibility statement",
         ],
-        "confidence": "high",
+        "confidence": "moderate",
         "source": "Confirmed on mirageatsouthpoint.com: entrata.com asset "
                    "subdomains + explicit 'Entrata, Inc.' footer copyright "
                    "and accessibility statement. (Note: w3techs had this "
                    "site mis-tagged as 'Yardi' -- likely stale data from "
                    "before a platform migration. Trust the live HTML over "
-                   "third-party trackers.)",
+                   "third-party trackers.) DOWNGRADED from high to moderate "
+                   "(2026-09-22) after adveniratlighthousepoint.com: this "
+                   "site's actual builder is confirmed Resident360 "
+                   "('Website by Resident360' explicit credit), but "
+                   "medialibrarycf.entrata.com STILL appeared -- because "
+                   "the site embeds an Entrata-powered floor-plan/media "
+                   "widget, not because Entrata built the whole site. Same "
+                   "lesson as Duda/Repli: an asset-domain match can mean "
+                   "'this resource is embedded here' rather than 'this "
+                   "vendor built the site' -- treat as real but uncertain "
+                   "unless an explicit builder credit (like 'Entrata, "
+                   "Inc.' copyright) is also present.",
     },
     {
         "name": "RealPage LeaseStar",
@@ -587,3 +598,27 @@ def check_hard_rules(html: str):
                 break  # one match per rule is enough, don't double-count
 
     return results
+
+
+def filter_to_highest_confidence(matches: list) -> list:
+    """
+    For DISPLAY purposes only: if any match in this category is "high"
+    confidence, drop any "moderate" confidence matches alongside it.
+
+    Why: "moderate" confidence exists specifically to flag patterns that
+    are sometimes misleading (e.g. the Entrata platform rule can fire from
+    just an embedded floor-plan widget, not because Entrata built the
+    site -- see adveniratlighthousepoint.com, 2026-09-22). When a
+    high-confidence result already answers the question, showing a
+    known-sometimes-wrong moderate result alongside it is noise, not
+    information -- it makes a clean, correct answer (e.g. "Resident360")
+    look like an ambiguous 3-way tie with WordPress and Entrata.
+
+    This does NOT affect whether AI fallback runs (see needs_platform /
+    needs_pms in app.py) -- those should still be based on whether ANY
+    match exists, high or moderate. This filter is purely about what
+    gets shown once we already have real information.
+    """
+    if any(m["confidence"] == "high" for m in matches):
+        return [m for m in matches if m["confidence"] == "high"]
+    return matches
