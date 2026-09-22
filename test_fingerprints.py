@@ -21,7 +21,15 @@ test_cases = [
         '<img src="https://cdn.appfoliowebsites.com/sites/resources/images/powered-by-appfolio.png">'
         '<link href="https://irp.cdn-website.com/39cfdf92/dms3rep/multi/opt/logo.png">'
         '<meta name="dm:lcp-preload" content="dm:lcp-frozen">',
-        {"platform": ["Duda"], "pms": ["AppFolio"]},
+        # NOTE: this was ORIGINALLY identified as "Duda" (the very first
+        # rule built today). Now that irp.cdn-website.com is confirmed as
+        # Repli/MultiHub's own infrastructure (see regencymp.com /
+        # repli360.com below), this site is actually also a Repli match --
+        # both fire here since the domain alone doesn't distinguish them,
+        # but the display filter will correctly show Repli (high
+        # confidence) instead of Duda (moderate) once deployed. This
+        # property was very likely mislabeled as "Duda" all along.
+        {"platform": ["Duda", "Repli (MultiHub)"], "pms": ["AppFolio"]},
     ),
     (
         "treehausclemson.com",
@@ -168,6 +176,16 @@ test_cases = [
         '<a href="https://adveniratlighthousepoint.prospectportal.com/Apartments/module/application_authentication/">Apply</a>'
         '[Website by Resident360](https://www.resident360.com/)',
         {"platform": ["WordPress", "Entrata", "Resident360"], "pms": ["Entrata (embedded widget)"]},
+    ),
+    (
+        "regencymp.com (Repli, upgraded to high confidence)",
+        '<img src="https://irp.cdn-website.com/850215ae/dms3rep/multi/opt/logo.png">'
+        'Powered by [white repli logo](https://www.repli360.com)',
+        # Duda also fires here since irp.cdn-website.com is now a pattern
+        # in both rules -- correct raw behavior; the display filter (see
+        # filter_to_highest_confidence) is what actually resolves this to
+        # showing just Repli once deployed, not this raw check.
+        {"platform": ["Duda", "Repli (MultiHub)"], "pms": []},
     ),
 ]
 
