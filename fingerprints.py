@@ -120,46 +120,49 @@ HARD_RULES = [
             "cdn-website.com",
         ],
         "confidence": "moderate",
-        "source": "DOWNGRADED from high back to moderate (2026-09-21) after "
-                   "a real conflict: songbirdkirkwood.com matches this "
-                   "pattern, but its footer explicitly says 'Website "
-                   "Design by Repli' / 'Powered by MultiHub' -- direct, "
-                   "authoritative counter-evidence that this domain is NOT "
-                   "Duda-exclusive. Likely explanation: cdn-website.com is "
-                   "shared backend/CDN infrastructure multiple different "
-                   "website-builder platforms use, not a single-vendor "
-                   "fingerprint. Originally seen on prproperties.org and "
-                   "(mistakenly re-confirmed on) songbirdkirkwood.com -- "
-                   "neither was independently verified by an explicit "
-                   "footer credit the way this rule normally requires. "
-                   "Treat any match as a real but uncertain signal, not "
-                   "proof -- check for a footer credit before trusting it.",
+        "source": "STATUS UPDATE (2026-09-22): this domain has now been "
+                   "traced to Repli/MultiHub with certainty (see the Repli "
+                   "rule above -- repli360.com's own corporate site uses "
+                   "it, plus two independent customer confirmations). "
+                   "Across all of today's testing, EVERY real sighting of "
+                   "this domain has turned out to be Repli, and Duda was "
+                   "never independently confirmed even once -- the "
+                   "original attribution came from general training "
+                   "knowledge, not a live-verified source. This rule is "
+                   "kept only as a residual fallback for the rare case "
+                   "where this domain appears with NO other Repli signal "
+                   "present (the high-confidence Repli rule already covers "
+                   "and will display instead whenever it also fires) -- "
+                   "treat any surfaced 'Duda' result as genuinely "
+                   "uncertain and worth a manual check, since it may well "
+                   "just be an unconfirmed Repli account with no other "
+                   "visible brand marker on that particular page.",
     },
     {
         "name": "Repli (MultiHub)",
         "category": "platform",
         "patterns": [
+            "repli360.com",
+            "irp.cdn-website.com",
             "website design by repli",
             "powered by multihub",
             "multihub",
             "repli.io",
             "alt=\"repli\"",
         ],
-        "confidence": "moderate",
-        "source": "Confirmed on songbirdkirkwood.com: footer credits "
-                   "'Website Design by Repli' / 'Powered by MultiHub' "
-                   "(Repli's product, confirmed as a real multifamily "
-                   "platform in the Revyse vendor research earlier -- "
-                   "'MultiHub is the property marketing platform for "
-                   "multifamily, built by Repli'). BROADENED after the "
-                   "full-phrase patterns failed to fire live: the brand "
-                   "credits render as logo IMAGES, not plain adjacent "
-                   "text, so 'website design by repli' as one contiguous "
-                   "string never actually appears in the raw HTML (an "
-                   "<img> tag sits between the words). Added bare "
-                   "'multihub' as the most distinctive single-word "
-                   "fallback -- lower confidence since it's broader and "
-                   "less specifically tied to a confirmed exact string.",
+        "confidence": "high",
+        "source": "UPGRADED from moderate to high (2026-09-22) after decisive "
+                   "evidence: repli360.com is Repli's OWN corporate site, "
+                   "and it uses irp.cdn-website.com for its own assets -- "
+                   "confirming that domain is Repli/MultiHub's platform "
+                   "infrastructure, not (as originally guessed, never "
+                   "independently confirmed) Duda's. Also confirmed on "
+                   "regencymp.com: explicit 'Powered by [repli logo]' "
+                   "linking directly to repli360.com. That's THREE real "
+                   "sites tying this domain to Repli (also "
+                   "songbirdkirkwood.com originally) and ZERO confirmed "
+                   "genuine Duda sightings across all of today's testing. "
+                   "Added 'repli360.com' itself as the strongest pattern.",
     },
     {
         "name": "WordPress",
