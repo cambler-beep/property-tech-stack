@@ -214,6 +214,181 @@ HARD_RULES = [
                    "worth closing regardless.",
     },
     {
+        "name": "Squarespace",
+        "category": "platform",
+        "patterns": [
+            "static1.squarespace.com",
+            "squarespace-cdn.com",
+            "squarespace.com/universal",
+        ],
+        "confidence": "high",
+        "source": "Well-established, widely-documented Squarespace "
+                   "fingerprint (same treatment as WordPress/Wix -- general "
+                   "platform knowledge). Added from the ranked CRM list "
+                   "(386 properties, 2026-09-21) -- not tied to one "
+                   "specific live multifamily example, but the pattern "
+                   "itself is extremely well-documented across the web at "
+                   "large, so confidence stays high despite that.",
+    },
+    {
+        "name": "Razz Interactive",
+        "category": "platform",
+        "patterns": [
+            "images.myrazz.com",
+            "happily made by razz",
+            "razzinteractive.com",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on hollandresidential.com/co/denver/commons-park-west/: "
+                   "footer credit 'Happily Made by Razz' linking to "
+                   "razzinteractive.com, plus every property image served "
+                   "from images.myrazz.com. Razz is the brand within "
+                   "Inhabit that powers ResMan Websites (confirmed via "
+                   "ResMan's own materials) -- #1 on the ranked CRM list "
+                   "by property count (1,269) that wasn't yet covered.",
+    },
+    {
+        "name": "RentVision",
+        "category": "platform",
+        "patterns": [
+            "rentvision.com",
+            "website created by rentvision",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on livebellehaven.com: meta-author is "
+                   "'RentVision', explicit 'Website created by RentVision' "
+                   "footer link, 'Admin Login' points to my.rentvision.com, "
+                   "and even the logo image filename is literally "
+                   "'websitePoweredByRentVision.png'. Four independent "
+                   "confirmations on one page.",
+    },
+    {
+        "name": "JUMPEM",
+        "category": "platform",
+        "patterns": [
+            "jumpem.com",
+            "powered by jumpem",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on themarkatlanta.com: 'Powered By Jumpem Web "
+                   "Design & Internet Marketing' footer credit linking to "
+                   "jumpem.com. Underlying CMS is WordPress -- same "
+                   "agency-plus-engine pattern as other agency rules.",
+    },
+    {
+        "name": "Internet Exposure (iExposure)",
+        "category": "platform",
+        "patterns": [
+            "iexposure.com",
+            "site created by: iexposure",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on livebh.com/apartments/sylvan-thirty-apartments/: "
+                   "explicit footer credit 'Site Created by: iExposure | "
+                   "Site hosted on Satorix'. Another CSV-name-vs-live-brand "
+                   "mismatch -- CRM tracks this vendor as 'Internet "
+                   "Exposure', live branding is 'iExposure'. Underlying CMS "
+                   "is WordPress.",
+    },
+    {
+        "name": "365 Connect",
+        "category": "platform",
+        "patterns": [
+            "365connect.com",
+            "365residentservices.com",
+            "powered by 365 connect",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on apartmentsspringtx.com: explicit '365 "
+                   "Connect - All Rights Reserved' footer text, 'Powered "
+                   "by 365 Connect' badge linking to 365connect.com, and "
+                   "assets served from the distinctive "
+                   "365residentservices.com domain.",
+    },
+    {
+        "name": "Resident360",
+        "category": "platform",
+        "patterns": [
+            "resident360.com",
+            "website by resident360",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on thealdentownes.com: explicit 'Website by "
+                   "Resident360' footer link to resident360.com, on top of "
+                   "WordPress. NOTE: a second example given for this "
+                   "vendor (adveniratlighthousepoint.com) was not yet "
+                   "independently checked -- worth confirming this pattern "
+                   "holds there too if it comes up.",
+    },
+    {
+        "name": "Spherexx",
+        "category": "platform",
+        "patterns": [
+            "spherexx.com",
+            "sxxweb8cdn",
+        ],
+        "confidence": "high",
+        "source": "Confirmed independently on TWO sites: lolaapartments.com "
+                   "and live33west.com -- both have a footer copyright "
+                   "link to spherexx.com/copyright/, an explicit "
+                   "'Spherexx' logo link, and assets served from "
+                   "sxxweb8cdn.cachefly.net (sxx = Spherexx abbreviated).",
+    },
+    {
+        "name": "Mixed Media Creations",
+        "category": "platform",
+        "patterns": [
+            "mixedmediacreations.com",
+            "crafted by mixed media creations",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on westloveapts.com: footer link title text "
+                   "'Crafted By Mixed Media Creations - Lewisville, TX' "
+                   "linking to mixedmediacreations.com, on top of "
+                   "WordPress.",
+    },
+    {
+        "name": "P11 Creative",
+        "category": "platform",
+        "patterns": [
+            "p11.com",
+            "site by p11",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on marketsquaretower.com: explicit 'Site By "
+                   "P11' footer credit linking to p11.com, on top of "
+                   "WordPress. NOTE: a second example given for this "
+                   "vendor (royceirvine.com) was not yet independently "
+                   "checked.",
+    },
+    {
+        "name": "Streetsense",
+        "category": "platform",
+        "patterns": [
+            "streetsense.com",
+            "design by streetsense",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on parkvanness.com: explicit 'Design by "
+                   "STREETSENSE' footer credit linking to streetsense.com.",
+    },
+    {
+        "name": "Swifty",
+        "category": "platform",
+        "patterns": [
+            "beswifty.com",
+            "powered by swifty",
+            "swifty-media.s3",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on townarlington.com: explicit 'Powered By "
+                   "Swifty' footer credit linking to beswifty.com, plus "
+                   "assets served from swifty-media.s3.us-east-1.amazonaws.com "
+                   "and a WordPress plugin path 'swifty-frontend'. CSV name "
+                   "('Swifty') matches the live brand exactly, unlike most "
+                   "other vendors today -- no alias needed.",
+    },
+    {
         "name": "LeaseLeads",
         "category": "platform",
         "patterns": [
@@ -358,6 +533,7 @@ HARD_RULES = [
         "patterns": [
             "entrata.com",
             "prospectportal.com",
+            "entrata.",
         ],
         "confidence": "moderate",
         "source": "Distinct from the 'Entrata' PLATFORM rule above, which "
@@ -376,7 +552,11 @@ HARD_RULES = [
                    "confirmed 'Entrata, Inc.' explicitly, but the link "
                    "domain itself doesn't contain the word 'entrata' at "
                    "all, so the plain entrata.com pattern alone would have "
-                   "missed this one.",
+                   "missed this one. Bare 'entrata.' (trailing dot) added "
+                   "after themarkatlanta.com's Apply link used a "
+                   "white-labeled subdomain -- entrata.themarkatlanta.com "
+                   "-- which contains neither entrata.com nor "
+                   "prospectportal.com as a substring.",
     },
 ]
 
