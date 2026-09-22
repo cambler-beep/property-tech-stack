@@ -187,6 +187,44 @@ test_cases = [
         # showing just Repli once deployed, not this raw check.
         {"platform": ["Duda", "Repli (MultiHub)"], "pms": []},
     ),
+    (
+        "park67glendale.com (Market Apartments)",
+        '[Apartment Marketing by MarketApts.com](https://www.marketapts.com/) '
+        '<img src="https://assets.marketapts.com/assets/converted/logo.png">',
+        {"platform": ["Market Apartments"], "pms": []},
+    ),
+    (
+        "editiononoberlin.com (Agency FIFTY3 + LeaseLeads)",
+        '[Built by LeaseLeads](https://leaseleads.co) '
+        '[WEBSITE DESIGNED BY AGENCY FIFTY3](https://agencyfifty3.com/)',
+        {"platform": ["LeaseLeads", "Agency FIFTY3"], "pms": []},
+    ),
+    (
+        "uptonoxmoor.com (Resite)",
+        '[Powered by Resite](https://www.thinkresite.com)',
+        {"platform": ["Resite"], "pms": []},
+    ),
+    (
+        "202park.com (Brindle Digital Marketing)",
+        '<a href="https://www.brindledigital.com/"><img src="brindle-icons.svg"></a>',
+        {"platform": ["Brindle Digital Marketing"], "pms": []},
+    ),
+    (
+        "kelsongroup.com (Rentsync)",
+        '[Designed and Developed by Rentsync](https://www.rentsync.com)',
+        {"platform": ["Rentsync"], "pms": []},
+    ),
+    (
+        "theoaksapts.com (BetterNOI)",
+        'Copyright (c) 2020-2026 BetterNOI, LLC. All rights reserved. '
+        '<a href="https://theoaksapts.bettercmspro.com/">Resident Portal</a>',
+        {"platform": ["BetterNOI"], "pms": []},
+    ),
+    (
+        "amli.com/apartments/.../amli-midtown-29 (Prismic)",
+        '<img src="https://images.prismic.io/amli-website/some-image.jpg?auto=compress,format">',
+        {"platform": ["Prismic"], "pms": []},
+    ),
 ]
 
 all_passed = True
