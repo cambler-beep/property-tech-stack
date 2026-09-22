@@ -245,6 +245,27 @@ HARD_RULES = [
                    "large, so confidence stays high despite that.",
     },
     {
+        "name": "Prismic",
+        "category": "platform",
+        "patterns": [
+            "images.prismic.io",
+            "prismic.io",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on amli.com/apartments/southeast-florida/"
+                   "miami-apartments/amli-midtown-29: literally every "
+                   "image on the page is served from images.prismic.io. "
+                   "Same treatment as WordPress/Wix/Squarespace -- Prismic "
+                   "is a real, specific headless-CMS product (not a bare "
+                   "language/framework like Ruby on Rails, which doesn't "
+                   "get a rule for exactly that reason), so it's an "
+                   "identifiable platform fact worth reporting even though "
+                   "it's not multifamily-specific. Typically the "
+                   "underlying engine behind a custom-built (often "
+                   "in-house, as with AMLI here) front-end, similar to how "
+                   "WordPress pairs with an agency credit.",
+    },
+    {
         "name": "Razz Interactive",
         "category": "platform",
         "patterns": [
@@ -385,6 +406,93 @@ HARD_RULES = [
         "confidence": "high",
         "source": "Confirmed on parkvanness.com: explicit 'Design by "
                    "STREETSENSE' footer credit linking to streetsense.com.",
+    },
+    {
+        "name": "Market Apartments",
+        "category": "platform",
+        "patterns": [
+            "marketapts.com",
+            "apartment marketing by marketapts",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on park67glendale.com: explicit '[Apartment "
+                   "Marketing by MarketApts.com]' footer credit, plus every "
+                   "image asset served from assets.marketapts.com. Also "
+                   "independently confirmed as a genuine agency (not a "
+                   "management company) via marketapts.com's own site: "
+                   "'get your website live in under 24 hours' template "
+                   "service.",
+    },
+    {
+        "name": "Agency FIFTY3",
+        "category": "platform",
+        "patterns": [
+            "agencyfifty3.com",
+            "designed by agency fifty3",
+            "design by agencyfifty3",
+        ],
+        "confidence": "high",
+        "source": "Confirmed independently on TWO sites: "
+                   "editiononoberlin.com ('WEBSITE DESIGNED BY AGENCY "
+                   "FIFTY3') and banyanflatsapts.com ('DESIGN BY "
+                   "AGENCYFIFTY3'), both linking to agencyfifty3.com.",
+    },
+    {
+        "name": "Resite",
+        "category": "platform",
+        "patterns": [
+            "thinkresite.com",
+            "powered by resite",
+            "resiteimages",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on uptonoxmoor.com: explicit 'Powered by "
+                   "Resite' footer credit -- but note the real domain is "
+                   "thinkresite.com, NOT resite.com (another CSV-name-vs-"
+                   "live-brand mismatch). Also assets served from a "
+                   "distinctive resiteimages...digitaloceanspaces.com CDN.",
+    },
+    {
+        "name": "Brindle Digital Marketing",
+        "category": "platform",
+        "patterns": [
+            "brindledigital.com",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on 202park.com: footer logo (brindle-icons.svg) "
+                   "links directly to brindledigital.com. Real domain is "
+                   "brindledigital.com, not brindledigitalmarketing.com as "
+                   "the CSV name might suggest.",
+    },
+    {
+        "name": "Rentsync",
+        "category": "platform",
+        "patterns": [
+            "rentsync.com",
+            "designed and developed by rentsync",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on kelsongroup.com/residential/panorama-crossing: "
+                   "explicit 'Designed and Developed by Rentsync' footer "
+                   "credit linking to rentsync.com, plus logo hosted on "
+                   "rentsync.s3.amazonaws.com. Canadian multifamily "
+                   "property management sites (Kelson Group, Fitzrovia).",
+    },
+    {
+        "name": "BetterNOI",
+        "category": "platform",
+        "patterns": [
+            "betternoi.com",
+            "bettercmspro.com",
+            "betternoi, llc",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on theoaksapts.com/en/: explicit 'Copyright "
+                   "(c) 2020-2026 BetterNOI, LLC' footer text, internal "
+                   "links to the bettercmspro.com subdomain (their CMS "
+                   "product, 'BetterCMS Pro'), and scripts hosted on "
+                   "betternoi.com (analytics.betternoi.com, "
+                   "ares.betternoi.com).",
     },
     {
         "name": "Swifty",
