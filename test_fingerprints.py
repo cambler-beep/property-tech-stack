@@ -161,6 +161,14 @@ test_cases = [
         '<img src="https://swifty-media.s3.us-east-1.amazonaws.com/sites/20418/logo.png">',
         {"platform": ["Swifty"], "pms": []},
     ),
+    (
+        "adveniratlighthousepoint.com (Resident360 built it, but embeds an Entrata widget)",
+        '<link rel="stylesheet" href="https://adveniratlighthousepoint.com/wp-content/themes/garden-east/style.css">'
+        '<img src="https://medialibrarycf.entrata.com/some/floorplan.jpg">'
+        '<a href="https://adveniratlighthousepoint.prospectportal.com/Apartments/module/application_authentication/">Apply</a>'
+        '[Website by Resident360](https://www.resident360.com/)',
+        {"platform": ["WordPress", "Entrata", "Resident360"], "pms": ["Entrata (embedded widget)"]},
+    ),
 ]
 
 all_passed = True
