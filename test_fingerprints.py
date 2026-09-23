@@ -225,6 +225,101 @@ test_cases = [
         '<img src="https://images.prismic.io/amli-website/some-image.jpg?auto=compress,format">',
         {"platform": ["Prismic"], "pms": []},
     ),
+    (
+        "villagegreenlancaster.com (Optimizely)",
+        '<img src="https://www.villagegreenlancaster.com/cdn-cgi/image/fit=cover/globalassets/migratedresources/village-green/logo.png">',
+        {"platform": ["Optimizely"], "pms": []},
+    ),
+    (
+        "carolinewestgray.com (Virtual Leasing Systems)",
+        '[Website provided by Virtual Leasing Systems](https://www.virtualleasingsystems.com)',
+        {"platform": ["Virtual Leasing Systems"], "pms": []},
+    ),
+    (
+        "postchicago.com (Threshold Agency)",
+        'WEBSITE POWERED BY [THRESHOLD](https://www.thresholdagency.com/)',
+        {"platform": ["Threshold Agency"], "pms": []},
+    ),
+    (
+        "thereserveatclarkstownny.com (Superpath)",
+        '[Marketing services powered by Superpath](http://superpathliving.com/)',
+        {"platform": ["Superpath"], "pms": []},
+    ),
+    (
+        "renaissancevirginiabeach.com (Junex)",
+        'Powered by Junex. All Rights Reserved.',
+        {"platform": ["Junex"], "pms": []},
+    ),
+    (
+        "village43.com (Highform)",
+        'Site Credit ![Built by Highform](https://village43.com/images/Highform-logo-second.svg) [](http://highform.com/)',
+        {"platform": ["Highform"], "pms": []},
+    ),
+    (
+        "17walnut.com (DB Marketing)",
+        '[![DB Marketing](logo.svg "DB Marketing")](https://www.dbmarketingltd.com/ "DB Marketing")',
+        {"platform": ["DB Marketing"], "pms": []},
+    ),
+    (
+        "westcottliving.com (Uncomn Projects)",
+        '[![](uncomn-logo.png)](https://uncomn-projects.com/ "Uncomn Projects")',
+        {"platform": ["Uncomn Projects"], "pms": []},
+    ),
+    (
+        "thecolina.com (People People)",
+        '[Web by People People.](http://people-people.com)',
+        {"platform": ["People People"], "pms": []},
+    ),
+    (
+        "cobbapartments.com (DEI Creative, corrected from 'Del Creative')",
+        '[Website by DEI Creative](http://deicreative.com)',
+        {"platform": ["DEI Creative"], "pms": []},
+    ),
+    (
+        "crystalwoodsapts.com (Social Fire Media)",
+        'Designed by [Social Fire Media](https://socialfiremedia.com)',
+        {"platform": ["Social Fire Media"], "pms": []},
+    ),
+    (
+        "nevele22.com (UpShift Creative)",
+        '[Site Design](https://upshiftcreative.com)',
+        {"platform": ["UpShift Creative"], "pms": []},
+    ),
+    (
+        "hearthonbroad.com (Dulce Design)",
+        'Web design by [Dulce Design Co.](http://www.dulcedesign.com/)',
+        {"platform": ["Dulce Design"], "pms": []},
+    ),
+    (
+        "bellevue10.com (BT Creative)",
+        'DESIGNED BY BT CREATIVE',
+        {"platform": ["BT Creative"], "pms": []},
+    ),
+    (
+        "the-provost.com (Paradigm Marketing & Creative)",
+        'Site by [Paradigm Marketing & Creative](https://2dimes.com)',
+        {"platform": ["Paradigm Marketing & Creative"], "pms": []},
+    ),
+    (
+        "theavenuehollywood.com (Tenderling)",
+        '[Site By Tenderling](https://tenderling.com)',
+        {"platform": ["Tenderling"], "pms": []},
+    ),
+    (
+        "circala.com (Studio Fabric)",
+        '[Site By Fabric](https://studiofabric.com)',
+        {"platform": ["Studio Fabric"], "pms": []},
+    ),
+    (
+        "theyardivanhoe.com (Prismatic)",
+        '[Branding + Website by PRISMATIC.](https://helloprismatic.com/)',
+        {"platform": ["Prismatic"], "pms": []},
+    ),
+    (
+        "fifteen51.com (Green Stick Marketing)",
+        'Site Created by [GREENstick](https://greenstick.io/)',
+        {"platform": ["Green Stick Marketing"], "pms": []},
+    ),
 ]
 
 all_passed = True
