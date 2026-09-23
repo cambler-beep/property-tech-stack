@@ -266,6 +266,241 @@ HARD_RULES = [
                    "WordPress pairs with an agency credit.",
     },
     {
+        "name": "Optimizely",
+        "category": "platform",
+        "patterns": [
+            "/globalassets/",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on villagegreenlancaster.com: the /globalassets/ "
+                   "path is used throughout for every image asset -- a "
+                   "well-documented, distinct Episerver/Optimizely CMS "
+                   "signature (Optimizely was formerly known as Episerver). "
+                   "Same treatment as Prismic -- a real, specific CMS "
+                   "product, not multifamily-specific but an identifiable "
+                   "platform fact.",
+    },
+    {
+        "name": "Virtual Leasing Systems",
+        "category": "platform",
+        "patterns": [
+            "virtualleasingsystems.com",
+            "website provided by virtual leasing systems",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on carolinewestgray.com: explicit 'Website "
+                   "provided by Virtual Leasing Systems' footer credit "
+                   "linking to virtualleasingsystems.com.",
+    },
+    {
+        "name": "Threshold Agency",
+        "category": "platform",
+        "patterns": [
+            "thresholdagency.com",
+            "powered by threshold",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on postchicago.com: explicit 'WEBSITE POWERED "
+                   "BY THRESHOLD' footer credit linking to "
+                   "thresholdagency.com.",
+    },
+    {
+        "name": "Superpath",
+        "category": "platform",
+        "patterns": [
+            "superpathliving.com",
+            "marketing services powered by superpath",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on thereserveatclarkstownny.com: explicit "
+                   "'Marketing services powered by Superpath' footer "
+                   "credit linking to superpathliving.com.",
+    },
+    {
+        "name": "Junex",
+        "category": "platform",
+        "patterns": [
+            "powered by junex",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on renaissancevirginiabeach.com: explicit "
+                   "'Powered by Junex.' footer text (plain text, no "
+                   "hyperlinked domain found).",
+    },
+    {
+        "name": "Highform",
+        "category": "platform",
+        "patterns": [
+            "highform.com",
+            "built by highform",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on village43.com: 'Site Credit -- Built by "
+                   "Highform' footer credit linking to highform.com.",
+    },
+    {
+        "name": "DB Marketing",
+        "category": "platform",
+        "patterns": [
+            "dbmarketingltd.com",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on 17walnut.com: footer logo image labeled "
+                   "'DB Marketing' linking directly to dbmarketingltd.com.",
+    },
+    {
+        "name": "Uncomn Projects",
+        "category": "platform",
+        "patterns": [
+            "uncomn-projects.com",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on westcottliving.com: footer logo image "
+                   "labeled 'Uncomn Projects' linking to "
+                   "uncomn-projects.com.",
+    },
+    {
+        "name": "People People",
+        "category": "platform",
+        "patterns": [
+            "people-people.com",
+            "web by people people",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on thecolina.com: explicit 'Web by People "
+                   "People.' footer credit linking to people-people.com.",
+    },
+    {
+        "name": "DEI Creative",
+        "category": "platform",
+        "patterns": [
+            "deicreative.com",
+            "website by dei creative",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on cobbapartments.com: explicit 'Website by "
+                   "DEI Creative' footer credit linking to deicreative.com, "
+                   "also independently confirmed via the page's own "
+                   "meta-author tag ('DEI Creative in Seattle, WA'). NOTE: "
+                   "this was given to us as 'Del Creative' -- the real "
+                   "name is DEI Creative; likely a misread of the name.",
+    },
+    {
+        "name": "Social Fire Media",
+        "category": "platform",
+        "patterns": [
+            "socialfiremedia.com",
+            "designed by social fire media",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on crystalwoodsapts.com: explicit 'Designed by "
+                   "Social Fire Media' footer credit linking to "
+                   "socialfiremedia.com.",
+    },
+    {
+        "name": "UpShift Creative",
+        "category": "platform",
+        "patterns": [
+            "upshiftcreative.com",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on nevele22.com: 'Site Design' footer link "
+                   "goes directly to upshiftcreative.com.",
+    },
+    {
+        "name": "Dulce Design",
+        "category": "platform",
+        "patterns": [
+            "dulcedesign.com",
+            "web design by dulce design",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on hearthonbroad.com: explicit 'Web design by "
+                   "Dulce Design Co.' footer credit linking to "
+                   "dulcedesign.com.",
+    },
+    {
+        "name": "BT Creative",
+        "category": "platform",
+        "patterns": [
+            "designed by bt creative",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on bellevue10.com: explicit 'DESIGNED BY BT "
+                   "CREATIVE' footer text (plain text, no hyperlinked "
+                   "domain found).",
+    },
+    {
+        "name": "Paradigm Marketing & Creative",
+        "category": "platform",
+        "patterns": [
+            "2dimes.com",
+            "site by paradigm marketing",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on the-provost.com: explicit 'Site by "
+                   "Paradigm Marketing & Creative' footer credit -- but "
+                   "the real linked domain is 2dimes.com, not a "
+                   "paradigm-branded domain (another name/domain "
+                   "mismatch, same pattern as Resite/thinkresite).",
+    },
+    {
+        "name": "Tenderling",
+        "category": "platform",
+        "patterns": [
+            "tenderling.com",
+            "site by tenderling",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on theavenuehollywood.com: explicit 'Site By "
+                   "Tenderling' footer credit linking to tenderling.com. "
+                   "(Greystar-managed property, using an outside agency -- "
+                   "consistent with Greystar Creative Services being the "
+                   "in-house team for some properties and outside "
+                   "agencies like this being used for others.)",
+    },
+    {
+        "name": "Studio Fabric",
+        "category": "platform",
+        "patterns": [
+            "studiofabric.com",
+            "site by fabric",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on circala.com: explicit 'Site By Fabric' "
+                   "footer credit linking to studiofabric.com.",
+    },
+    {
+        "name": "Prismatic",
+        "category": "platform",
+        "patterns": [
+            "helloprismatic.com",
+            "branding + website by prismatic",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on theyardivanhoe.com: explicit 'Branding + "
+                   "Website by PRISMATIC.' footer credit linking to "
+                   "helloprismatic.com. NOTE: distinct company from "
+                   "'Prismic' (the headless CMS, prismic.io) despite the "
+                   "near-identical name -- do not conflate the two.",
+    },
+    {
+        "name": "Green Stick Marketing",
+        "category": "platform",
+        "patterns": [
+            "greenstick.io",
+            "site created by greenstick",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on fifteen51.com: explicit 'Site Created by "
+                   "GREENstick' footer credit linking to greenstick.io, "
+                   "independently confirmed by the page's own "
+                   "accessibility-statement contact email "
+                   "(kmill@greenstick.io). Live brand is shown as "
+                   "'GREENstick' (one word); CSV name is 'Green Stick "
+                   "Marketing'.",
+    },
+    {
         "name": "Razz Interactive",
         "category": "platform",
         "patterns": [
