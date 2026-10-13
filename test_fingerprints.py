@@ -320,6 +320,11 @@ test_cases = [
         'Site Created by [GREENstick](https://greenstick.io/)',
         {"platform": ["Green Stick Marketing"], "pms": []},
     ),
+    (
+        "arcadiasantafe.com (WRK Partners)",
+        'Designed by [WRK Partners](https://wrkpartners.com)',
+        {"platform": ["WRK Partners"], "pms": []},
+    ),
 ]
 
 all_passed = True
