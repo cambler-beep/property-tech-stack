@@ -325,6 +325,11 @@ test_cases = [
         'Designed by [WRK Partners](https://wrkpartners.com)',
         {"platform": ["WRK Partners"], "pms": []},
     ),
+    (
+        "godwinvaapts.com (Web Weaving)",
+        'Site by [Web Weaving](https://www.webweaving.com)',
+        {"platform": ["Web Weaving"], "pms": []},
+    ),
 ]
 
 all_passed = True
