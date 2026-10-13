@@ -513,6 +513,18 @@ HARD_RULES = [
                    "Site is WordPress-based.",
     },
     {
+        "name": "Web Weaving",
+        "category": "platform",
+        "patterns": [
+            "webweaving.com",
+            "site by web weaving",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on godwinvaapts.com: explicit 'Site by "
+                   "Web Weaving' footer credit linking to webweaving.com. "
+                   "Site is WordPress-based.",
+    },
+    {
         "name": "Razz Interactive",
         "category": "platform",
         "patterns": [
