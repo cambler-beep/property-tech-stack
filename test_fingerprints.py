@@ -29,7 +29,7 @@ test_cases = [
         # but the display filter will correctly show Repli (high
         # confidence) instead of Duda (moderate) once deployed. This
         # property was very likely mislabeled as "Duda" all along.
-        {"platform": ["Duda", "Repli (MultiHub)"], "pms": ["AppFolio"]},
+        {"platform": ["AppFolio Websites", "Duda", "Repli (shared asset CDN)"], "pms": ["AppFolio"]},
     ),
     (
         "treehausclemson.com",
@@ -185,7 +185,7 @@ test_cases = [
         # in both rules -- correct raw behavior; the display filter (see
         # filter_to_highest_confidence) is what actually resolves this to
         # showing just Repli once deployed, not this raw check.
-        {"platform": ["Duda", "Repli (MultiHub)"], "pms": []},
+        {"platform": ["Duda", "Repli (MultiHub)", "Repli (shared asset CDN)"], "pms": []},
     ),
     (
         "park67glendale.com (Market Apartments)",
@@ -329,6 +329,65 @@ test_cases = [
         "godwinvaapts.com (Web Weaving)",
         'Site by [Web Weaving](https://www.webweaving.com)',
         {"platform": ["Web Weaving"], "pms": []},
+    ),
+    (
+        "auricvegasapartments.com (Union)",
+        'Powered by [Union](https://gounion.com)',
+        {"platform": ["Union"], "pms": []},
+    ),
+    (
+        "ovationco.com/property/tesora (Engrain + RealPage ActiveBuilding)",
+        '[Design by Engrain](https://creativebyengrain.com) '
+        '[Resident Portal](https://tesora.activebuilding.com/login)',
+        {"platform": ["Engrain (Creative by Engrain)"],
+         "pms": ["RealPage (legacy / ActiveBuilding)"]},
+    ),
+    (
+        "portoescondido.com (AppFolio logo only; logo hosted on Repli CDN)",
+        '![AppFolio Property Manager](https://irp.cdn-website.com/369050e0/dms3rep/multi/AppFolio+Logo+White.svg)',
+        {"platform": ["Duda", "Repli (shared asset CDN)"], "pms": ["AppFolio"]},
+    ),
+    (
+        "thepeakatsonoma.com (Tri-plicity + SecureCafe)",
+        '[Designed and Developed by Tri-plicity Design + Marketing]'
+        '(https://smallbusinessmarketingkc.com) '
+        '[Resident Login](https://thepeakatsonoma.securecafe.com/residentservices/the-peak-at-sonoma/userlogin.aspx)',
+        {"platform": ["Tri-plicity Design + Marketing"],
+         "pms": ["Yardi (via RentCafe / SecureCafe)"]},
+    ),
+    (
+        "theridgehagerstown.com (Repli footer credit + MultiHub media)",
+        '<a href="https://www.repli360.com/"><img alt="Repli Logo"></a>'
+        '<img src="https://media.multihub.io/cdn-cgi/image/format=auto/property/x.webp">',
+        {"platform": ["Repli (MultiHub)"], "pms": []},
+    ),
+    (
+        "legacyparknc.com (AppFolio Websites builder, shared CDN, AppFolio PMS)",
+        '<link href="https://cdn.appfoliowebsites.com/sites/resources/css/appfolio-global-styles.css">'
+        '<img src="https://irp.cdn-website.com/366118c3/dms3rep/multi/opt/logo.png">'
+        '<a href="https://valorresidential.appfolio.com/connect">Pay Rent</a>',
+        {"platform": ["AppFolio Websites", "Duda", "Repli (shared asset CDN)"],
+         "pms": ["AppFolio"]},
+    ),
+    (
+        "upperivy.com (Entrata footer credit, high confidence)",
+        '©2026 Entrata, Inc. All rights reserved. '
+        "Entrata's Accessibility Statement",
+        {"platform": ["Entrata"], "pms": []},
+    ),
+    (
+        "liveatlakeandwells.com (Craft CMS + RealPage)",
+        '<meta name="meta-app:csrfTokenName" content="CRAFT_CSRF_TOKEN">'
+        '[Apply Now](https://9002721.onlineleasing.realpage.com/)'
+        '[Resident Login](https://lakeandwells.activebuilding.com/login)',
+        {"platform": ["Craft CMS"],
+         "pms": ["RealPage (legacy / ActiveBuilding)", "RealPage (online leasing)"]},
+    ),
+    (
+        "proseparkvale.com (Worboys Design + RealPage online leasing)",
+        'Website by  \n[Worboys Design](https://proseparkvale.com/worboysdesign.com)\n'
+        '[Apply Now](https://9201577.onlineleasing.realpage.com/)',
+        {"platform": ["Worboys Design"], "pms": ["RealPage (online leasing)"]},
     ),
 ]
 
