@@ -27,6 +27,9 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 ALIASES = {
     "eliseai": ["meetelise", "meet elise", "elise ai"],
     "tour24": ["tour 24", "tour24.com"],
+    "hyly": ["hy.ly"],  # live tool loads from my.hy.ly; the hyphen-free "hyly"
+                        # never appears in the page, only "hy.ly" does. Confirmed via
+                        # catherinesantamonica.com DevTools sources (2026-10-16).
     "funnel": ["funnelleasing"],  # CSV says "Funnel", live product/domain is
                                     # "funnelleasing.com" -- the word-boundary
                                     # match (added to stop "door" matching
