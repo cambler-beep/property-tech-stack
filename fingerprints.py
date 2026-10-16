@@ -75,8 +75,14 @@ HARD_RULES = [
             "entrata, inc.",
             "entrata's accessibility statement",
         ],
-        "confidence": "moderate",
-        "source": "Confirmed on mirageatsouthpoint.com: entrata.com asset "
+        "confidence": "high",
+        "source": "UPGRADED from moderate to high (2026-10-16): an explicit "
+                   "'Entrata, Inc.' copyright footer plus an Entrata-issued "
+                   "accessibility statement are builder credits, not just "
+                   "embedded widgets. Confirmed on mirageatsouthpoint.com "
+                   "and independently on caroline georgetown, caroline at "
+                   "longhorn quarry, and upperivy.com (live fetch). Original "
+                   "note: entrata.com asset "
                    "subdomains + explicit 'Entrata, Inc.' footer copyright "
                    "and accessibility statement. (Note: w3techs had this "
                    "site mis-tagged as 'Yardi' -- likely stale data from "
@@ -143,7 +149,8 @@ HARD_RULES = [
         "category": "platform",
         "patterns": [
             "repli360.com",
-            "irp.cdn-website.com",
+            "media.multihub.io",
+            "designed by repli",
             "website design by repli",
             "powered by multihub",
             "multihub",
@@ -163,6 +170,23 @@ HARD_RULES = [
                    "songbirdkirkwood.com originally) and ZERO confirmed "
                    "genuine Duda sightings across all of today's testing. "
                    "Added 'repli360.com' itself as the strongest pattern.",
+    },
+    {
+        "name": "Repli (shared asset CDN)",
+        "category": "platform",
+        "patterns": [
+            "irp.cdn-website.com",
+        ],
+        "confidence": "moderate",
+        "source": "SPLIT OUT (2026-10-16). irp.cdn-website.com is Repli's "
+                   "infrastructure domain, but it is also a shared asset CDN "
+                   "that appears on sites where a different vendor built the "
+                   "front end (legacyparknc.com loads its CSS and JS from "
+                   "AppFolio Websites and still references this domain). A "
+                   "match here is a weak signal, so it is moderate. Repli is "
+                   "high confidence only when its own credit or domain is "
+                   "present (repli360.com, media.multihub.io, 'designed by "
+                   "repli').",
     },
     {
         "name": "WordPress",
@@ -525,6 +549,96 @@ HARD_RULES = [
                    "Site is WordPress-based.",
     },
     {
+        "name": "Union",
+        "category": "platform",
+        "patterns": [
+            "gounion.com",
+            "powered by union",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on auricvegasapartments.com: explicit "
+                   "'Powered by' Union logo linking to gounion.com, plus "
+                   "footer references to 'Union Privacy Policy' and 'Union "
+                   "Terms of Use'. Managed by Mark-Taylor Residential.",
+    },
+    {
+        "name": "Engrain (Creative by Engrain)",
+        "category": "platform",
+        "patterns": [
+            "creativebyengrain.com",
+            "design by engrain",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on ovationco.com/property/tesora/apartments/: "
+                   "footer credit 'Design by Engrain' linking to "
+                   "creativebyengrain.com. Site runs on WordPress, uses "
+                   "a SightMap embed for the map view, and points its "
+                   "Residents link at activebuilding.com (RealPage). Engrain "
+                   "is the company this tool belongs to, so this rule "
+                   "flags sites Engrain built.",
+    },
+    {
+        "name": "Craft CMS",
+        "category": "platform",
+        "patterns": [
+            "craft_csrf_token",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on liveatlakeandwells.com: the page's meta tag "
+                   "'meta-app:csrfTokenName' is set to CRAFT_CSRF_TOKEN, "
+                   "which is Craft CMS's own CSRF token name. Craft is a "
+                   "real, specific CMS (like WordPress), so it's reported as "
+                   "the platform. Managed by Greystar; PMS is RealPage. "
+                   "The token is specific enough to avoid collisions with "
+                   "generic 'uploads/' or 'assets/' paths, which were not used.",
+    },
+    {
+        "name": "Tri-plicity Design + Marketing",
+        "category": "platform",
+        "patterns": [
+            "designed and developed by tri-plicity",
+            "smallbusinessmarketingkc.com",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on thepeakatsonoma.com: footer credit 'Designed "
+                   "and Developed by Tri-plicity Design + Marketing' linking "
+                   "to smallbusinessmarketingkc.com. Site is WordPress-based "
+                   "and uses SecureCafe for applicants and residents. Managed "
+                   "by Oddo Development Company.",
+    },
+    {
+        "name": "AppFolio Websites",
+        "category": "platform",
+        "patterns": [
+            "cdn.appfoliowebsites.com",
+        ],
+        "confidence": "high",
+        "source": "SPLIT OUT of the AppFolio PMS rule (2026-10-16). "
+                   "cdn.appfoliowebsites.com serves AppFolio's own website "
+                   "templates: appfolio-global-styles.css, "
+                   "appfolio-global-scripts.js and appfolio-global-accessibility.js "
+                   "on legacyparknc.com (confirmed in DevTools). That makes "
+                   "AppFolio the front-end builder, separate from its PMS role "
+                   "(valorresidential.appfolio.com portal). Also appears on "
+                   "prproperties.org.",
+    },
+    {
+        "name": "Worboys Design",
+        "category": "platform",
+        "patterns": [
+            "worboysdesign",
+            "website by worboys design",
+        ],
+        "confidence": "high",
+        "source": "Confirmed on proseparkvale.com: footer 'Website by "
+                   "Worboys Design' credit linking to worboysdesign.com "
+                   "(the link is malformed, pointing to a path under "
+                   "proseparkvale.com, so the bare 'worboysdesign' token "
+                   "is the reliable pattern). Site is WordPress-based. "
+                   "Managed by Greystar / Alliance Residential, with "
+                   "RealPage online leasing.",
+    },
+    {
         "name": "Razz Interactive",
         "category": "platform",
         "patterns": [
@@ -834,14 +948,18 @@ HARD_RULES = [
         "name": "AppFolio",
         "category": "pms",
         "patterns": [
-            "cdn.appfoliowebsites.com",
             "powered-by-appfolio",
             "appfolio.com",
+            "appfolio property manager",
         ],
         "confidence": "high",
         "source": "Confirmed on prproperties.org/central-flats: explicit "
                    "'powered by AppFolio' badge image next to the resident "
-                   "'Online Portal / Log In' link.",
+                   "'Online Portal / Log In' link. Also added "
+                   "'appfolio property manager' (2026-10-16) after "
+                   "portoescondido.com: its only AppFolio signal is the "
+                   "'AppFolio Property Manager' logo image (alt text), with "
+                   "no appfolio.com link on the page.",
     },
     {
         "name": "RealPage (via LOFT resident portal)",
